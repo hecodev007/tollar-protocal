@@ -289,6 +289,9 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
         usrIncentive = UsrIncentive(_incentive);
     }
 
+    function setGlobalCollateralRatioForTest(uint256 ratio) public onlyByOwnerGovernanceOrController {
+        global_collateral_ratio = ratio;
+    }
     // Remove a pool
     function removePool(address pool_address) public onlyByOwnerGovernanceOrController {
         require(pool_address != address(0), "Zero address detected");
