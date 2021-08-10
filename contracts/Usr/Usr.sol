@@ -177,13 +177,13 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
 
     function tar_usd_price() public view returns (uint256) {
         //1e6 precision
-        uint256 price_tar_usr = uint256(tarUsrOracle.consultRealtime(tar_address, PRICE_PRECISION));
-        uint256 price_usr_usd = uint256(usrUsdOracle.consultRealtime(address(this), PRICE_PRECISION));
-        return price_tar_usr.mul(price_usr_usd).div(PRICE_PRECISION);
+        uint256 price_tar_usr = uint256(tarUsrOracle.consultRealtime(tar_address, 1e18));
+        uint256 price_usr_usd = uint256(usrUsdOracle.consultRealtime(address(this), 1e18));
+        return price_tar_usr.mul(price_usr_usd).div(1e18);
     }
 
     function Usr_price() public view returns (uint256) {
-        return uint256(usrUsdOracle.consultRealtime(address(this), PRICE_PRECISION));
+        return uint256(usrUsdOracle.consultRealtime(address(this), 1e18));
     }
 
     function tar_usd_24H_price() public view returns (uint256) {

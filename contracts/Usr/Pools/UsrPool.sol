@@ -387,7 +387,6 @@ contract UsrPool is AccessControl, Owned {
             TARAmount = redeemTARBalances[msg.sender];
             redeemTARBalances[msg.sender] = 0;
             unclaimedPoolTAR = unclaimedPoolTAR.sub(TARAmount);
-
             sendTAR = true;
         }
 
