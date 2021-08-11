@@ -259,13 +259,13 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
         emit CollateralRatioRefreshed(global_collateral_ratio);
     }
 
-    function GetMintFractionalUSROutMin(uint256 collateral_amount) public view returns (uint256, uint256) {
+    function GetMintFractionalUSROutMin(uint256 collateral_amount,address pool) public view returns (uint256, uint256) {
         uint256 tar_price = tar_usd_price();
         uint256 global_collateral_ratio = global_collateral_ratio();
 
         uint256 collateral_amount_d18 = collateral_amount * (10 ** missing_decimals);
 
-        uint256 c_dollar_value_d18 = collateral_amount_d18.mul(getCollateralPrice()).div(1e6);
+        uint256 c_dollar_value_d18 = collateral_amount_d18.mul(UsrPool(pool).getCollateralPrice()).div(1e6);
         uint calculated_tar_dollar_value_d18 =
         (c_dollar_value_d18.mul(1e6).div(global_collateral_ratio))
         .sub(c_dollar_value_d18);
