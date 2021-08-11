@@ -318,27 +318,7 @@ contract UsrPool is AccessControl, Owned {
         USR.pool_mint(msg.sender, mint_amount);
     }
 
-    function GetMintFractionalUSROutMin(uint256 collateral_amount) public view returns (uint256, uint256) {
-        uint256 tar_price = USR.tar_usd_price();
-        uint256 global_collateral_ratio = USR.global_collateral_ratio();
 
-        require(global_collateral_ratio < COLLATERAL_RATIO_MAX && global_collateral_ratio > 0, "Collateral ratio needs to be between .000001 and .999999");
-        require(collateral_token.balanceOf(address(this)).sub(unclaimedPoolCollateral).add(collateral_amount) <= pool_ceiling, "Pool ceiling reached, no more USR can be minted with this collateral");
-
-        uint256 collateral_amount_d18 = collateral_amount * (10 ** missing_decimals);
-        UsrPoolLibrary.MintFF_Params memory input_params = UsrPoolLibrary.MintFF_Params(
-            tar_price,
-            getCollateralPrice(),
-            0,
-            collateral_amount_d18,
-            global_collateral_ratio
-        );
-
-        (uint256 mint_amount, uint256 tar_needed) = UsrPoolLibrary.calcMintFractionalUSR(input_params);
-
-        mint_amount = (mint_amount.mul(uint(1e6).sub(minting_fee))).div(1e6);
-        return (mint_amount, tar_needed);
-    }
     // Redeem collateral. 100% collateral-backed
     function redeem1t1USR(uint256 USR_amount, uint256 COLLATERAL_out_min) external notRedeemPaused {
         require(USR.global_collateral_ratio() == COLLATERAL_RATIO_MAX, "Collateral ratio must be == 1");
