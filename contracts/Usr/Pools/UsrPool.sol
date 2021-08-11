@@ -329,7 +329,7 @@ contract UsrPool is AccessControl, Owned {
         UsrPoolLibrary.MintFF_Params memory input_params = UsrPoolLibrary.MintFF_Params(
             tar_price,
             getCollateralPrice(),
-            tar_amount,
+            0,
             collateral_amount_d18,
             global_collateral_ratio
         );
