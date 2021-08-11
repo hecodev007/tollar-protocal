@@ -318,7 +318,7 @@ contract UsrPool is AccessControl, Owned {
         USR.pool_mint(msg.sender, mint_amount);
     }
 
-    function GetMintAlgorithmicUSROutMin(uint256 collateral_amount) public view returns (uint256, uint256) {
+    function GetMintFractionalUSROutMin(uint256 collateral_amount) public view returns (uint256, uint256) {
         uint256 tar_price = USR.tar_usd_price();
         uint256 global_collateral_ratio = USR.global_collateral_ratio();
 
