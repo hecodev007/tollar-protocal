@@ -275,18 +275,18 @@ contract UsrPool is AccessControl, Owned {
         USR.pool_mint(msg.sender, usr_amount_d18);
     }
 
-    function GetMintAlgorithmicUSROutMin(uint256 tar_amount_d18) public view returns (uint256) {
-        uint256 tar_price = USR.tar_usd_price();
-        require(USR.global_collateral_ratio() == 0, "Collateral ratio must be 0");
-
-        (uint256 usr_amount_d18) = UsrPoolLibrary.calcMintAlgorithmicUSR(
-            tar_price, // X TAR / 1 USD
-            tar_amount_d18
-        );
-
-        usr_amount_d18 = (usr_amount_d18.mul(uint(1e6).sub(minting_fee))).div(1e6);
-        return usr_amount_d18;
-    }
+//    function GetMintAlgorithmicUSROutMin(uint256 tar_amount_d18) public view returns (uint256) {
+//        uint256 tar_price = USR.tar_usd_price();
+//        require(USR.global_collateral_ratio() == 0, "Collateral ratio must be 0");
+//
+//        (uint256 usr_amount_d18) = UsrPoolLibrary.calcMintAlgorithmicUSR(
+//            tar_price, // X TAR / 1 USD
+//            tar_amount_d18
+//        );
+//
+//        usr_amount_d18 = (usr_amount_d18.mul(uint(1e6).sub(minting_fee))).div(1e6);
+//        return usr_amount_d18;
+//    }
 
 
     // Will fail if fully collateralized or fully algorithmic
