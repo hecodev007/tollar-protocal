@@ -67,7 +67,7 @@ contract UsrPool is AccessControl, Owned {
     uint256 public redemption_delay = 1;
 
     uint256 public GenesisMint = 0;
-    uint256 private genesisMintSupply = 1000000e18;
+    uint256 public genesisMintSupply = 1000000e18;
     // AccessControl Roles
     bytes32 private constant MINT_PAUSER = keccak256("MINT_PAUSER");
     bytes32 private constant REDEEM_PAUSER = keccak256("REDEEM_PAUSER");
