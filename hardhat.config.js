@@ -75,7 +75,7 @@ module.exports = {
         apiKey: `QVDVP85WK5D2UT77DWYEZPHGWZ2U5JFU3K` // ETH Mainnet
        //   apiKey: `UMHGM6QP7MVI1NUVHBW4N3NZHTPJPAFG6J` // BSC
     },
-   // defaultNetwork: "ropsten",
+   // defaultNetwork: "development",
     development: {
         host: "127.0.0.1",     // Localhost (default: none)
         port: 7545,            // Standard Ethereum port (default: none)

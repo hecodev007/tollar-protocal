@@ -43,6 +43,8 @@ contract UsrIncentive is Owned {
     address private UsrAddress;
     address private TarAddress;
     UsrStablecoin private USR;
+    uint256 private lastTarUsd24H = 0;
+    uint256 private  _tarUsd24H = 0;
     modifier onlyUsr() {
         require(UsrAddress == msg.sender, "only Usr");
         _;
@@ -181,18 +183,19 @@ contract UsrIncentive is Owned {
 
         if (USR.IsOracleReady()) {
             if (USR.tarUsr24HOracleCanUpdate() == true) {
-
-                uint256 lastTarUsd24H = USR.tar_usd_24H_price();
+                lastTarUsd24H = _tarUsd24H;
                 USR.tarUsr24HOracleUpdate();
-                uint256 _tarUsd24H = USR.tar_usd_24H_price();
-                if (_tarUsd24H < lastTarUsd24H) {
-                    curDeclineDays += 1;
-                }
             }
-
             if (USR.usrUsd24HOracleCanUpdate() == true) {
                 USR.usrUsd24HOracleUpdate();
             }
+
+            _tarUsd24H = USR.tar_usd_24H_price();
+            if (_tarUsd24H < lastTarUsd24H) {
+                curDeclineDays += 1;
+            }
+
+
             uint256 tarUsd = USR.tar_usd_price();
             uint256 tarUsd24H = USR.tar_usd_24H_price();
             if (tarUsd != 0 && tarUsd24H != 0) {

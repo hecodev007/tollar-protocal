@@ -241,23 +241,6 @@ contract UsrPool is AccessControl, Owned {
         USR.pool_mint(msg.sender, usr_amount_d18);
     }
 
-//    function GetMint1t1USROutMin(uint256 collateral_amount) public view returns (uint256) {
-//        uint256 collateral_amount_d18 = collateral_amount * (10 ** missing_decimals);
-//
-//        require(USR.global_collateral_ratio() >= COLLATERAL_RATIO_MAX, "Collateral ratio must be >= 1");
-//        require((collateral_token.balanceOf(address(this))).sub(unclaimedPoolCollateral).add(collateral_amount) <= pool_ceiling, "[Pool's Closed]: Ceiling reached");
-//
-//        (uint256 usr_amount_d18) = UsrPoolLibrary.calcMint1t1USR(
-//            getCollateralPrice(),
-//            collateral_amount_d18
-//        );
-//        //1 USR for each $1 worth of collateral
-//
-//        usr_amount_d18 = (usr_amount_d18.mul(uint(1e6).sub(minting_fee))).div(1e6);
-//        return usr_amount_d18;
-//    }
-
-
     // 0% collateral-backed
     function mintAlgorithmicUSR(uint256 tar_amount_d18, uint256 USR_out_min) external notMintPaused {
         uint256 tar_price = USR.tar_usd_price();
@@ -274,19 +257,6 @@ contract UsrPool is AccessControl, Owned {
         TAR.pool_burn_from(msg.sender, tar_amount_d18);
         USR.pool_mint(msg.sender, usr_amount_d18);
     }
-
-//    function GetMintAlgorithmicUSROutMin(uint256 tar_amount_d18) public view returns (uint256) {
-//        uint256 tar_price = USR.tar_usd_price();
-//        require(USR.global_collateral_ratio() == 0, "Collateral ratio must be 0");
-//
-//        (uint256 usr_amount_d18) = UsrPoolLibrary.calcMintAlgorithmicUSR(
-//            tar_price, // X TAR / 1 USD
-//            tar_amount_d18
-//        );
-//
-//        usr_amount_d18 = (usr_amount_d18.mul(uint(1e6).sub(minting_fee))).div(1e6);
-//        return usr_amount_d18;
-//    }
 
 
     // Will fail if fully collateralized or fully algorithmic
