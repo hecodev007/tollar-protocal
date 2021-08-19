@@ -216,7 +216,6 @@ contract UsrPool is AccessControl, Owned {
 
     function GenesisWithDrawCollateral() external {
         require(genesisRedeemBalances[msg.sender] > 0 && genesisLastRedeemed[msg.sender].add(redemption_delay) <= block.number, "not enough quota to Genesis WithDraw");
-        //console.log("GenesisWithDrawCollateral:",block.number);
         genesisAccount.transfer(address(collateral_token), msg.sender, genesisRedeemBalances[msg.sender]);
         genesisRedeemBalances[msg.sender] = 0;
     }

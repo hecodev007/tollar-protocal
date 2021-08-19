@@ -121,6 +121,18 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         console.log("AddWhitelist", curRoundIndex);
     }
 
+    function RoundMintInfo(address account) view public returns (uint256 total, uint256 mintedAmount, uint256 balance){
+        uint256 _totalAmount;
+        uint256 _mintedAmount;
+        uint256 _balance;
+        for (uint32 i = 0; i < curRoundIndex; i++) {
+            _totalAmount = _totalAmount.add(Rounds[i][account].total);
+            _balance = _balance.add(Rounds[i][account].balance);
+        }
+        _mintedAmount = _totalAmount.sub(_balance);
+        return (_totalAmount, _mintedAmount, _balance);
+    }
+
     function RoundMintAmount(address account) view public returns (uint256 total){
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 start = Rounds[i][account].startTime;
