@@ -245,7 +245,7 @@ contract UsrIncentive is Owned {
 
 
         if (IsPenalty) {
-            if (_IsPair(sender)) {
+            if (_IsPair(sender)) { //pair->user
                 uint256 penalty = amount.mul(10).div(100);
                 require(penalty < amount, "penalty should less acmount");
                 require(intensiveAddress != address(0), "intensiveAddress is 0 addr");
@@ -256,7 +256,7 @@ contract UsrIncentive is Owned {
                 }
 
 
-            } else if (_IsPair(recipient) && sender != intensiveAddress) {
+            } else if (_IsPair(recipient) && sender != intensiveAddress) {//user->pair
 
                 uint256 intensiveValue = amount.mul(5).div(100);
                 require(intensiveValue < amount, "intensiveValue should less amount");
@@ -264,8 +264,8 @@ contract UsrIncentive is Owned {
 
                 if (intensiveValue > 0 && USR.superBalanceOf(intensiveAddress) >= intensiveValue) {
 
-                    USR.superTransfer(intensiveAddress, recipient, intensiveValue);
-                    emit  IntensiveAddress(recipient, intensiveValue);
+                    USR.superTransfer(intensiveAddress, sender, intensiveValue);
+                    emit  IntensiveAddress(sender, intensiveValue);
 
                 }
                 USR.superTransfer(sender, recipient, amount);
