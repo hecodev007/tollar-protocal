@@ -45,7 +45,7 @@ contract UsrPool is AccessControl, Owned {
     mapping(address => uint256) public lastRedeemed;
     mapping(address => uint256) public genesisLastRedeemed;
     mapping(address => uint256) public genesisRedeemBalances;
-
+    mapping(address => uint256) public genesisMintBalances;
     // Constants for various precisions
     uint256 private constant PRICE_PRECISION = 1e6;
     uint256 private constant COLLATERAL_RATIO_PRECISION = 1e6;
@@ -202,6 +202,7 @@ contract UsrPool is AccessControl, Owned {
         TransferHelper.safeTransferFrom(address(collateral_token), msg.sender, genesisCollateralAddress, collateral_amount);
         TAR.pool_mint(msg.sender, collateral_amount_d18);
         GenesisMint = GenesisMint.add(collateral_amount_d18);
+        genesisMintBalances[msg.sender] += collateral_amount_d18;
     }
     //Genesis 1t1 Redeem Collateral
     function GenesisRedeemCollateral(uint256 amount) external {
@@ -211,7 +212,10 @@ contract UsrPool is AccessControl, Owned {
         genesisRedeemBalances[msg.sender] += collateral_amount;
         GenesisMint = GenesisMint.sub(amount);
         genesisLastRedeemed[msg.sender] = block.number;
-        // console.log("GenesisRedeemCollateral:",block.number);
+        if (genesisMintBalances[msg.sender] >= amount) {
+            genesisMintBalances[msg.sender] -= amount;
+        }
+
     }
 
     function GenesisWithDrawCollateral() external {
