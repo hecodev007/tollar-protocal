@@ -259,7 +259,7 @@ contract UsrIncentive is Owned {
                     emit PenaltyAddress(recipient, penalty);
                 }
 
-            } else if (_IsPair(recipient) && sender != intensiveAddress) {//user->pair
+            } else if (_IsPair(recipient) && sender != penaltyAddress) {//user->pair
 
                 uint256 intensiveValue = amount.mul(5).div(100);
                 require(intensiveValue < amount, "intensiveValue should less amount");
