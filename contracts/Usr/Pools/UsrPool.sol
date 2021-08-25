@@ -202,18 +202,18 @@ contract UsrPool is AccessControl, Owned {
         TransferHelper.safeTransferFrom(address(collateral_token), msg.sender, genesisCollateralAddress, collateral_amount);
         TAR.pool_mint(msg.sender, collateral_amount_d18);
         GenesisMint = GenesisMint.add(collateral_amount_d18);
-        genesisMintBalances[msg.sender] += collateral_amount_d18;
+        genesisMintBalances[msg.sender] = genesisMintBalances[msg.sender].add(collateral_amount_d18);
     }
     //Genesis 1t1 Redeem Collateral
     function GenesisRedeemCollateral(uint256 amount) external {
         require(GenesisMint > amount && GenesisMintStart == true, "not enough quota to Genesis Redeem");
         uint256 collateral_amount = amount.div(10 ** missing_decimals);
         TAR.pool_burn_from(msg.sender, amount);
-        genesisRedeemBalances[msg.sender] += collateral_amount;
+        genesisRedeemBalances[msg.sender] = genesisRedeemBalances[msg.sender].add(collateral_amount);
         GenesisMint = GenesisMint.sub(amount);
         genesisLastRedeemed[msg.sender] = block.number;
         if (genesisMintBalances[msg.sender] >= amount) {
-            genesisMintBalances[msg.sender] -= amount;
+            genesisMintBalances[msg.sender] = genesisMintBalances[msg.sender].sub(amount);
         }
 
     }
