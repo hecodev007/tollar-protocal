@@ -40,6 +40,7 @@ contract UsrIncentive is Owned {
     bool public IsPenalty = false; //
     mapping(address => bool) public intensive;//swap pair include usr
     address public intensiveAddress;
+    address public penaltyAddress;
     address private UsrAddress;
     address private TarAddress;
     UsrStablecoin private USR;
@@ -63,6 +64,7 @@ contract UsrIncentive is Owned {
         creator_address = _creator_address;
         timelock_address = _timelock_address;
         intensiveAddress = createContract("intensiveAddress");
+        penaltyAddress = createContract("penaltyAddress");
         UsrAddress = _usrAddress;
         USR = UsrStablecoin(_usrAddress);
         TarAddress = _tarAddress;
@@ -251,20 +253,21 @@ contract UsrIncentive is Owned {
                 require(intensiveAddress != address(0), "intensiveAddress is 0 addr");
                 USR.superTransfer(sender, recipient, amount.sub(penalty));
                 if (penalty > 0) {
-                    USR.superTransfer(sender, intensiveAddress, penalty);
+                    uint256 penaltyHalf = amount.mul(5).div(100);
+                    USR.superTransfer(sender, intensiveAddress, penaltyHalf);
+                    USR.superTransfer(sender, penaltyAddress, penaltyHalf);
                     emit PenaltyAddress(recipient, penalty);
                 }
-
 
             } else if (_IsPair(recipient) && sender != intensiveAddress) {//user->pair
 
                 uint256 intensiveValue = amount.mul(5).div(100);
                 require(intensiveValue < amount, "intensiveValue should less amount");
-                require(intensiveAddress != address(0), "intensiveAddress is 0 addr");
+                require(penaltyAddress != address(0), "penaltyAddress is 0 addr");
 
-                if (intensiveValue > 0 && USR.superBalanceOf(intensiveAddress) >= intensiveValue) {
+                if (intensiveValue > 0 && USR.superBalanceOf(penaltyAddress) >= intensiveValue) {
 
-                    USR.superTransfer(intensiveAddress, sender, intensiveValue);
+                    USR.superTransfer(penaltyAddress, sender, intensiveValue);
                     emit  IntensiveAddress(sender, intensiveValue);
 
                 }
