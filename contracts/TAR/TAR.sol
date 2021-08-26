@@ -193,7 +193,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         }
         console.log("realAmount:", realAmount);
 
-        TransferHelper.safeTransferFrom(USRStableCoinAddr, msg.sender, this, realAmount);
+        TransferHelper.safeTransferFrom(USRStableCoinAddr, msg.sender, address(this), realAmount);
         mintWithDraw[msg.sender] = mintWithDraw[msg.sender].add(realAmount);
         mintBalance[msg.sender] = mintAmount.sub(realAmount);
         lastMint[msg.sender] = block.number;
