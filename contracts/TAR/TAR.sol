@@ -169,10 +169,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
             }
             uint32 elapsedDay = (curTime - start) / (24 * 3600);
             uint256 totalAmount = Rounds[i][account].total;
-            console.log("_roundMintAmount:", i, account, totalAmount);
             uint256 mintAmount = totalAmount.mul(uint256(elapsedDay)).div(uint256((i + 12) * 30));
-            console.log("mintAmount:", mintAmount);
-            console.log("elapsedDay:", elapsedDay);
             uint256 mintedAmount = totalAmount.sub(Rounds[i][account].balance);
             if (mintAmount > mintedAmount) {
                 total = total.add(mintAmount.sub(mintedAmount));
@@ -196,10 +193,11 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         }
         console.log("realAmount:", realAmount);
 
-        TransferHelper.safeTransferFrom(USRStableCoinAddr, msg.sender, intensiveAddress, realAmount);
+        TransferHelper.safeTransferFrom(USRStableCoinAddr, msg.sender, this, realAmount);
         mintWithDraw[msg.sender] = mintWithDraw[msg.sender].add(realAmount);
         mintBalance[msg.sender] = mintAmount.sub(realAmount);
         lastMint[msg.sender] = block.number;
+        emit RoundMintOne(msg.sender, realAmount);
     }
 
     function WithDrawMint() public {
@@ -212,7 +210,9 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
             _mint(team_address, mintWithDraw[msg.sender].mul(10).div(100));
         }
         _mint(msg.sender, mintWithDraw[msg.sender].sub(mintWithDraw[msg.sender].mul(30).div(100)));
+        emit WithDrawMintOne(msg.sender, mintWithDraw[msg.sender]);
         mintWithDraw[msg.sender] = 0;
+
     }
 
     function setTimelock(address new_timelock) external onlyByOwnerOrGovernance {
@@ -422,4 +422,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
     event USRAddressSet(address addr);
 
     event BalanceChanged(address sender, uint256 amount0, address receipt, uint256 amount1);
+
+    event RoundMintOne(address user, uint256 amount);
+    event  WithDrawMintOne(address user, uint256 amount);
 }

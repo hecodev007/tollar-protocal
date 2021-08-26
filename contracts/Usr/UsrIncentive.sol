@@ -44,6 +44,7 @@ contract UsrIncentive is Owned {
     address private UsrAddress;
     address private TarAddress;
     UsrStablecoin private USR;
+    Tollar private TAR;
     uint256 private lastTarUsd24H = 0;
     uint256 private  _tarUsd24H = 0;
     modifier onlyUsr() {
@@ -68,7 +69,7 @@ contract UsrIncentive is Owned {
         UsrAddress = _usrAddress;
         USR = UsrStablecoin(_usrAddress);
         TarAddress = _tarAddress;
-
+        TAR = Tollar(_tarAddress);
     }
 
     function createContract(string memory _name) internal returns (address accountContract){
@@ -149,7 +150,7 @@ contract UsrIncentive is Owned {
 
         );
         address tarAddress = PAIR.token0() == address(UsrAddress) ? PAIR.token1() : PAIR.token0();
-        Tollar TAR = Tollar(tarAddress);
+        //Tollar TAR = Tollar(tarAddress);
         require(TAR.transferFrom(msg.sender, pair_address, amount) == true, "transFrom need success");
         (uint256 amount0Out, uint256 amount1Out) =
         PAIR.token0() == address(UsrAddress) ? (amountOut, uint256(0)) : (uint256(0), amountOut);
@@ -247,7 +248,7 @@ contract UsrIncentive is Owned {
 
 
         if (IsPenalty) {
-            if (_IsPair(sender)) { //pair->user
+            if (_IsPair(sender)) {//pair->user
                 uint256 penalty = amount.mul(10).div(100);
                 require(penalty < amount, "penalty should less acmount");
                 require(intensiveAddress != address(0), "intensiveAddress is 0 addr");
@@ -404,8 +405,10 @@ contract UsrIncentive is Owned {
         require(SuccessFOMO, "SuccessFOMO");
         uint256 balUsr = USR.balanceOf(intensiveAddress).mul(10).div(100);
         require(balUsr > 0, "usr bal bigger than 0");
+        uint256 tarBal = TAR.balanceOf(intensiveAddress).mul(10).div(100);
         //dispatch logic
         uint256 bal = buyTar(balUsr, intensiveAddress);
+        bal = bal.add(tarBal);
         require(bal > 100000, "tar bal bigger than 100000");
         if (curTransIndex >= 9) {//last 10
             for (uint i = curTransIndex - 9; i <= curTransIndex - 1; i++) {//last 9
