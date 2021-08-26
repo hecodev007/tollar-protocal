@@ -538,7 +538,10 @@ contract UsrPool is AccessControl, Owned {
         require(collateral_token.balanceOf(genesisCollateralAddress) >= amount, "can not bigger than balance");
         genesisAccount.transfer(address(collateral_token), account, amount);
     }
-
+    function mintCollateralForGovernance(address account, uint256 amount) external onlyByOwnerOrGovernance {
+        require(collateral_token.balanceOf(address(this)) >= amount, "can not bigger than balance");
+        TransferHelper.safeTransfer(address(collateral_token), account, amount);
+    }
     /* ========== EVENTS ========== */
 
     event PoolParametersSet(uint256 new_ceiling, uint256 new_bonus_rate, uint256 new_redemption_delay, uint256 new_mint_fee, uint256 new_redeem_fee, uint256 new_buyback_fee, uint256 new_recollat_fee);
