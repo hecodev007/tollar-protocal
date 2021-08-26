@@ -67,6 +67,7 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
     address private incentive;
     UsrIncentive private usrIncentive;
     bool private isOracleReady = false;
+    uint256 public sur_supply = 0;
     /* ========== MODIFIERS ========== */
 
 
@@ -259,7 +260,7 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
         emit CollateralRatioRefreshed(global_collateral_ratio);
     }
 
-    function GetMintFractionalUSROutMin(uint256 collateral_amount,uint256 missing_decimals, address pool) public view returns (uint256, uint256) {
+    function GetMintFractionalUSROutMin(uint256 collateral_amount, uint256 missing_decimals, address pool) public view returns (uint256, uint256) {
         uint256 tar_price = tar_usd_price();
         uint256 global_collateral_ratio = global_collateral_ratio;
 
@@ -282,12 +283,16 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
     function pool_burn_from(address b_address, uint256 b_amount) public onlyPools {
         super._burnFrom(b_address, b_amount);
         emit UsrBurned(b_address, msg.sender, b_amount);
+        if (sur_supply >= b_amount) {
+            sur_supply = sur_supply.sub(b_amount);
+        }
     }
 
     // This function is what other Usr pools will call to mint new Usr
     function pool_mint(address m_address, uint256 m_amount) public onlyPools {
         super._mint(m_address, m_amount);
         emit UsrMinted(msg.sender, m_address, m_amount);
+        sur_supply = sur_supply.add(m_amount);
     }
 
     // Adds collateral addresses supported, such as tether and busd, must be ERC20

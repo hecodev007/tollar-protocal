@@ -56,6 +56,8 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
     // The number of checkpoints for each account
     mapping(address => uint32) public numCheckpoints;
 
+    uint256 public tar_supply = 0;
+
     /* ========== MODIFIERS ========== */
 
     modifier onlyPools() {
@@ -211,6 +213,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         }
         _mint(msg.sender, mintWithDraw[msg.sender].sub(mintWithDraw[msg.sender].mul(30).div(100)));
         emit WithDrawMintOne(msg.sender, mintWithDraw[msg.sender]);
+        tar_supply = tar_supply.add(mintWithDraw[msg.sender]);
         mintWithDraw[msg.sender] = 0;
 
     }
@@ -230,6 +233,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
 
     function mint(address to, uint256 amount) public onlyPools {
         _mint(to, amount);
+        tar_supply = tar_supply.add(amount);
     }
 
     // This function is what other usr pools will call to mint new TAR (similar to the USR mint)
@@ -244,6 +248,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         }
 
         super._mint(m_address, m_amount);
+        tar_supply = tar_supply.add(m_amount);
         emit TARMinted(address(this), m_address, m_amount);
     }
 
@@ -259,6 +264,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         }
 
         super._burnFrom(b_address, b_amount);
+        tar_supply = tar_supply.sub(b_amount);
         emit TARBurned(b_address, address(this), b_amount);
     }
 
