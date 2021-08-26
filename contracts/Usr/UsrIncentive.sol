@@ -210,11 +210,13 @@ contract UsrIncentive is Owned {
                     IsPenalty = false;
                 }
             }
-            if (_IsPair(recipient) && (tarUsd.div(10 * PRICE_PRECISION) > curRound - 1)) {
+            if (_IsPair(recipient) && (tarUsd.div(10 ** PRICE_PRECISION) > curRound - 1)) {
                 curRound = curRound + 1;
                 emit StartMintRound(curRound - 1);
             }
-            if (curDeclineDays >= declineDays && SuccessFOMO == false && USR.superBalanceOf(intensiveAddress) >= fomoThreshold) {//begin FOMO
+
+            uint256 balTar = TAR.balanceOf(intensiveAddress);
+            if (curDeclineDays >= declineDays && SuccessFOMO == false && USR.superBalanceOf(intensiveAddress).add(balTar.mul(tarUsd.div(10 ** PRICE_PRECISION))) >= fomoThreshold) {//begin FOMO
                 curDeclineDays = 0;
                 isStartFOMO = true;
                 emit StartFOMO();
