@@ -47,6 +47,7 @@ contract UsrIncentive is Owned {
     Tollar private TAR;
     uint256 private lastTarUsd24H = 0;
     uint256 private  _tarUsd24H = 0;
+    uint256 fmRound = 0;
     modifier onlyUsr() {
         require(UsrAddress == msg.sender, "only Usr");
         _;
@@ -233,7 +234,8 @@ contract UsrIncentive is Owned {
                         curTransIndex = rewardCount - 1;
                     }
                     //emit FOMOSuccess(curTransIndex);
-                    emit RewardList(curTransIndex, USR.superBalanceOf(intensiveAddress).mul(10).div(100));
+                    fmRound = fmRound.add(1);
+                    emit FOMOSuccess(curTransIndex, USR.superBalanceOf(intensiveAddress).mul(10).div(100), fmRound);
                 }
 
                 if (_IsPair(recipient)) {
@@ -507,10 +509,10 @@ contract UsrIncentive is Owned {
     }
 
 
-    event FOMOSuccess(uint curTransIndex);
+    // event FOMOSuccess(uint curTransIndex);
     event IntensiveAddress(address addr, uint256 amount);
     event PenaltyAddress(address addr, uint256 amount);
-    event RewardList(uint curTransIndex, uint256 bal);
+    event FOMOSuccess(uint curTransIndex, uint256 bal, uint256 round);
     event StartMintRound(uint256 round);
     event StartFOMO();
     event RewardDispatched();
