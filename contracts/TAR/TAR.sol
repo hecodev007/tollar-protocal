@@ -136,17 +136,19 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
     }
 
     function RoundMintAmount(address account) view public returns (uint256 total){
+        // uint32 dayTime = 24 * 3600;
+        uint32 dayTime = 60;
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 start = Rounds[i][account].startTime;
             uint32 curTime = currentBlockTimestamp();
-            if (start == 0 || curTime < start + 24 * 3600) {
+            if (start == 0 || curTime < start + dayTime) {
                 continue;
             }
-            uint32 endTime = start + (i + 12) * 30 * 24 * 3600;
+            uint32 endTime = start + (i + 12) * 30 * dayTime;
             if (curTime > endTime) {
                 curTime = endTime;
             }
-            uint32 elapsedDay = (curTime - start) / (24 * 3600);
+            uint32 elapsedDay = (curTime - start) / dayTime;
             uint256 totalAmount = Rounds[i][account].total;
             uint256 mintAmount = totalAmount.mul(uint256(elapsedDay)).div(uint256((i + 12) * 30));
             uint256 mintedAmount = totalAmount.sub(Rounds[i][account].balance);
@@ -159,17 +161,19 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
 
     function _roundMintAmount(address account) internal returns (uint256 total){
         console.log("curRoundIndex:", curRoundIndex);
+        // uint32 dayTime = 24 * 3600;
+        uint32 dayTime = 60;
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 start = Rounds[i][account].startTime;
             uint32 curTime = currentBlockTimestamp();
-            if (start == 0 || curTime < start + 24 * 3600) {
+            if (start == 0 || curTime < start + dayTime) {
                 continue;
             }
-            uint32 endTime = start + (i + 12) * 30 * 24 * 3600;
+            uint32 endTime = start + (i + 12) * 30 * dayTime;
             if (curTime > endTime) {
                 curTime = endTime;
             }
-            uint32 elapsedDay = (curTime - start) / (24 * 3600);
+            uint32 elapsedDay = (curTime - start) / dayTime;
             uint256 totalAmount = Rounds[i][account].total;
             uint256 mintAmount = totalAmount.mul(uint256(elapsedDay)).div(uint256((i + 12) * 30));
             uint256 mintedAmount = totalAmount.sub(Rounds[i][account].balance);
