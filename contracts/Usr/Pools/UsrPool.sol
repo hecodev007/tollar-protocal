@@ -468,12 +468,12 @@ contract UsrPool is AccessControl, Owned {
 
     /* ========== RESTRICTED FUNCTIONS ========== */
 
-    function toggleMinting() external {
-        require(hasRole(MINT_PAUSER, msg.sender));
-        mintPaused = !mintPaused;
-
-        emit MintingToggled(mintPaused);
-    }
+//    function toggleMinting() external {
+//        require(hasRole(MINT_PAUSER, msg.sender));
+//        mintPaused = !mintPaused;
+//
+//        emit MintingToggled(mintPaused);
+//    }
 
     function toggleGenesisMinting() external onlyByOwnerOrGovernance {
         GenesisMintStart = !GenesisMintStart;
