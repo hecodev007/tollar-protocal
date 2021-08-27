@@ -508,7 +508,7 @@ contract UsrPool is AccessControl, Owned {
     }
 
     // Combined into one function due to 24KiB contract memory limit
-    function setPoolParameters(uint256 new_ceiling, uint256 new_bonus_rate, uint256 new_redemption_delay, uint256 new_mint_fee, uint256 new_redeem_fee, uint256 new_buyback_fee, uint256 new_recollat_fee, uint256 mintSupply) external onlyByOwnerOrGovernance {
+    function setPoolParameters(uint256 new_ceiling, uint256 new_bonus_rate, uint256 new_redemption_delay, uint256 new_mint_fee, uint256 new_redeem_fee, uint256 new_buyback_fee, uint256 new_recollat_fee, uint256 mintSupply,address new_timelock) external onlyByOwnerOrGovernance {
         pool_ceiling = new_ceiling;
         bonus_rate = new_bonus_rate;
         redemption_delay = new_redemption_delay;
@@ -517,14 +517,15 @@ contract UsrPool is AccessControl, Owned {
         buyback_fee = new_buyback_fee;
         recollat_fee = new_recollat_fee;
         genesisMintSupply = mintSupply;
+        timelock_address = new_timelock;
         emit PoolParametersSet(new_ceiling, new_bonus_rate, new_redemption_delay, new_mint_fee, new_redeem_fee, new_buyback_fee, new_recollat_fee);
     }
 
-    function setTimelock(address new_timelock) external onlyByOwnerOrGovernance {
-        timelock_address = new_timelock;
-
-        emit TimelockSet(new_timelock);
-    }
+//    function setTimelock(address new_timelock) external onlyByOwnerOrGovernance {
+//        timelock_address = new_timelock;
+//
+//        emit TimelockSet(new_timelock);
+//    }
 
 
     function genesisCollateralForGovernance(address account, uint256 amount) external onlyByOwnerOrGovernance {
@@ -545,7 +546,6 @@ contract UsrPool is AccessControl, Owned {
     event RecollateralizeToggled(bool toggled);
     event BuybackToggled(bool toggled);
     event CollateralPriceToggled(bool toggled);
-   // event GenesisMintTARET(address sender, uint256 amount);
-   // event GenesisRedeemCollateralET(address sender, uint256 amount);
+
 
 }
