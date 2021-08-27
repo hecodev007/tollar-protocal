@@ -117,5 +117,12 @@ library UsrPoolLibrary {
         return (amount_to_recollat.mul(1e6).div(col_price), amount_to_recollat);
 
     }
+    function createContract(string memory _name) public returns (address accountContract){
+        bytes memory bytecode = type(AccountAddress).creationCode;
+        bytes32 salt = keccak256(bytes(_name));
+        assembly {
+            accountContract := create2(0, add(bytecode, 32), mload(bytecode), salt)
+        }
 
+    }
 }

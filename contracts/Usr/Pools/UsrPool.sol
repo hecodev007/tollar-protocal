@@ -125,7 +125,7 @@ contract UsrPool is AccessControl, Owned {
         collateral_token = ERC20(_collateral_address);
         pool_ceiling = _pool_ceiling;
         missing_decimals = uint(18).sub(collateral_token.decimals());
-        genesisCollateralAddress = createContract("genesisCollateralAddress");
+        genesisCollateralAddress = UsrPoolLibrary.createContract("genesisCollateralAddress");
         genesisAccount = AccountAddress(genesisCollateralAddress);
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         grantRole(MINT_PAUSER, timelock_address);
@@ -136,14 +136,7 @@ contract UsrPool is AccessControl, Owned {
     }
 
 
-    function createContract(string memory _name) internal returns (address accountContract){
-        bytes memory bytecode = type(AccountAddress).creationCode;
-        bytes32 salt = keccak256(bytes(_name));
-        assembly {
-            accountContract := create2(0, add(bytecode, 32), mload(bytecode), salt)
-        }
 
-    }
     /* ========== VIEWS ========== */
 
     // Returns dollar value of collateral held in this Usr pool
