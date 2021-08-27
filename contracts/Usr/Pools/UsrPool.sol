@@ -203,7 +203,7 @@ contract UsrPool is AccessControl, Owned {
         TAR.pool_mint(msg.sender, collateral_amount_d18);
         GenesisMint = GenesisMint.add(collateral_amount_d18);
         genesisMintBalances[msg.sender] = genesisMintBalances[msg.sender].add(collateral_amount_d18);
-        emit GenesisMintTARET(msg.sender, collateral_amount_d18);
+       // emit GenesisMintTARET(msg.sender, collateral_amount_d18);
 
     }
     //Genesis 1t1 Redeem Collateral
@@ -217,7 +217,7 @@ contract UsrPool is AccessControl, Owned {
         if (genesisMintBalances[msg.sender] >= amount) {
             genesisMintBalances[msg.sender] = genesisMintBalances[msg.sender].sub(amount);
         }
-        emit GenesisRedeemCollateralET(msg.sender, amount);
+      //  emit GenesisRedeemCollateralET(msg.sender, amount);
     }
 
     function GenesisWithDrawCollateral() external {
@@ -552,7 +552,7 @@ contract UsrPool is AccessControl, Owned {
     event RecollateralizeToggled(bool toggled);
     event BuybackToggled(bool toggled);
     event CollateralPriceToggled(bool toggled);
-    event GenesisMintTARET(address sender, uint256 amount);
-    event GenesisRedeemCollateralET(address sender, uint256 amount);
+   // event GenesisMintTARET(address sender, uint256 amount);
+   // event GenesisRedeemCollateralET(address sender, uint256 amount);
 
 }
