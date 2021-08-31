@@ -31,7 +31,7 @@ contract UsrPool is AccessControl, Owned {
     UniswapPairOracle private collatEthOracle;
     address public collat_eth_oracle_address;
     address private weth_address;
-    address private  genesisCollateralAddress;
+    address public  genesisCollateralAddress;
     AccountAddress  private  genesisAccount;
     uint256 public minting_fee;
     uint256 public redemption_fee;
