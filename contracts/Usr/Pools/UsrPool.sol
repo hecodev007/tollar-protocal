@@ -85,7 +85,7 @@ contract UsrPool is AccessControl, Owned {
     /* ========== MODIFIERS ========== */
 
     modifier onlyByOwnerOrGovernance() {
-        require(msg.sender == timelock_address || msg.sender == owner, "You are not the owner or the governance timelock");
+        require(msg.sender == timelock_address || msg.sender == owner, "only By OwnerOr Governance");
         _;
     }
 
@@ -190,8 +190,6 @@ contract UsrPool is AccessControl, Owned {
         require(GenesisMintStart == true, "Genesis mint not start!");
         uint256 collateral_amount_d18 = collateral_amount * (10 ** missing_decimals);
         require(GenesisMint.add(collateral_amount_d18) < genesisMintSupply, "not enough quota to Genesis mint!");
-        console.log("collateral amount:", collateral_amount);
-        console.log("genesisCollateralAddress:", genesisCollateralAddress);
         TransferHelper.safeTransferFrom(address(collateral_token), msg.sender, genesisCollateralAddress, collateral_amount);
         TAR.pool_mint(msg.sender, collateral_amount_d18);
         GenesisMint = GenesisMint.add(collateral_amount_d18);
