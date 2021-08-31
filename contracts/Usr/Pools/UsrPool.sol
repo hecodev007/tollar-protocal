@@ -461,12 +461,6 @@ contract UsrPool is AccessControl, Owned {
 
     /* ========== RESTRICTED FUNCTIONS ========== */
 
-//    function toggleMinting() external {
-//        require(hasRole(MINT_PAUSER, msg.sender));
-//        mintPaused = !mintPaused;
-//
-//        emit MintingToggled(mintPaused);
-//    }
 
     function toggleGenesisMinting() external onlyByOwnerOrGovernance {
         GenesisMintStart = !GenesisMintStart;
@@ -520,12 +514,6 @@ contract UsrPool is AccessControl, Owned {
         timelock_address = new_timelock;
         emit PoolParametersSet(new_ceiling, new_bonus_rate, new_redemption_delay, new_mint_fee, new_redeem_fee, new_buyback_fee, new_recollat_fee);
     }
-
-//    function setTimelock(address new_timelock) external onlyByOwnerOrGovernance {
-//        timelock_address = new_timelock;
-//
-//        emit TimelockSet(new_timelock);
-//    }
 
 
     function genesisCollateralForGovernance(address account, uint256 amount) external onlyByOwnerOrGovernance {
