@@ -20,6 +20,7 @@ contract UsrIncentive is Owned {
     struct UserReward {
         address account;
         uint256 reward;
+        uint256 amount;
         uint256 level;
     }
     /* ========== STATE VARIABLES ========== */
@@ -54,9 +55,9 @@ contract UsrIncentive is Owned {
     uint256 private lastTarUsd24H = 0;
     uint256 private  _tarUsd24H = 0;
     uint256 public fmRound = 0;
-    //round->level->addr->value
-    mapping(uint256 => mapping(address => UserReward)) public rewards;
-
+    //round->addr->value
+    //mapping(uint256 => mapping(address => UserReward)) public rewards;
+    mapping(uint256 => UserReward[]) public rewards;
     modifier onlyUsr() {
         require(UsrAddress == msg.sender, "only Usr");
         _;
@@ -250,6 +251,9 @@ contract UsrIncentive is Owned {
                     }
                     //emit FOMOSuccess(curTransIndex);
                     fmRound = fmRound.add(1);
+                    //                    for(uint i =0;i<UserLast100Trans.length;i++){
+                    //                        RewardUsers[fmRound].push(UserLast100Trans[i]);
+                    //                    }
                     emit FOMOSuccess(curTransIndex, USR.superBalanceOf(intensiveAddress).mul(10).div(100), fmRound);
                 }
 
@@ -309,7 +313,7 @@ contract UsrIncentive is Owned {
         //reward 100x
         if (info.account != address(0)) {
             buyTar(reward, info.account);
-            rewards[fmRound][info.account] = UserReward(info.account, reward, 1);
+            rewards[fmRound].push(UserReward(info.account, reward, info.amount, 1));
         }
 
     }
@@ -318,14 +322,14 @@ contract UsrIncentive is Owned {
         uint256 reward = info.amount.mul(10);
         //reward 10x
         buyTar(reward, info.account);
-        rewards[fmRound][info.account] = UserReward(info.account, reward, 2);
+        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 2));
     }
 
     function sendLast90(UserTrans memory info) internal {
         uint256 reward = info.amount.mul(10).div(100);
         //reward 10%
         buyTar(reward, info.account);
-        rewards[fmRound][info.account] = UserReward(info.account, reward, 3);
+        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 3));
     }
 
     function sendPercentChampion(UserTrans memory info, uint256 bal) internal {
@@ -333,7 +337,7 @@ contract UsrIncentive is Owned {
         //reward 90.8/100
         if (info.account != address(0)) {
             AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
-            rewards[fmRound][info.account] = UserReward(info.account, reward, 1);
+            rewards[fmRound].push(UserReward(info.account, reward, info.amount, 1));
         }
 
     }
@@ -343,7 +347,7 @@ contract UsrIncentive is Owned {
         //reward each 1/100
 
         AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
-        rewards[fmRound][info.account] = UserReward(info.account, reward, 2);
+        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 2));
         // buyTar(reward, info.account);
     }
 
@@ -352,7 +356,7 @@ contract UsrIncentive is Owned {
         //reward 0.09/100
         // each 0.09/(100*90)
         AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
-        rewards[fmRound][info.account] = UserReward(info.account, reward, 3);
+        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 3));
     }
 
     function dispatchReward() public onlyByOwnerGovernanceOrController {
