@@ -435,7 +435,7 @@ contract UsrIncentive is Owned {
         //dispatch logic
         uint256 bal = buyTar(balUsr, intensiveAddress);
         bal = bal.add(tarBal);
-        require(bal > 100000, "tar bal bigger than 100000");
+        require(bal > 100000, "tar'bal>100000");
         if (curTransIndex >= 9) {//last 10
             for (uint i = curTransIndex - 9; i <= curTransIndex - 1; i++) {//last 9
                 if (UserLast100Trans[i].account == address(0)) {
@@ -530,6 +530,22 @@ contract UsrIncentive is Owned {
         USR.superTransfer(intensiveAddress, account, amount);
     }
 
+//    function RoundMintTest() external onlyByOwnerGovernanceOrController {
+//        uint256 tarUsd = USR.tar_usd_price();
+//        if ((tarUsd.div(10 * PRICE_PRECISION) > curRound - 1)) {
+//            curRound = curRound + 1;
+//            console.log("1");
+//        }
+//        for (uint i = 1; i < 10; i++) {
+//            tarUsd = tarUsd.mul(i * 10);
+//            if ((tarUsd.div(10 * PRICE_PRECISION) > curRound - 1)) {
+//                curRound = curRound + 1;
+//            }
+//            console.log("curRound:", curRound - 1);
+//        }
+//
+//
+//    }
 
     // event FOMOSuccess(uint curTransIndex);
     event IntensiveAddress(address addr, uint256 amount);
