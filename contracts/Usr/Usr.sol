@@ -174,18 +174,48 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
     }
 
 
+    function usrUsd1HOracleUpdate() public onlyIncentive {
+        usrUsdOracle.update();
+    }
+
+    function usrUsd1HOracleCanUpdate() public view onlyIncentive
+    returns (bool){
+        return usrUsdOracle.canUpdate();
+    }
+
+    function tarUsr1HOracleUpdate() public onlyIncentive {
+        tarUsrOracle.update();
+    }
+
+    function tarUsr1HOracleCanUpdate() public view onlyIncentive
+    returns (bool){
+        return tarUsrOracle.canUpdate();
+    }
+
     /* ========== VIEWS ========== */
+
+    //    function tar_usd_price() public view returns (uint256) {
+    //        //1e6 precision
+    //        uint256 price_tar_usr = uint256(tarUsrOracle.consultRealtime(tar_address, 1e18));
+    //        uint256 price_usr_usd = uint256(usrUsdOracle.consultRealtime(address(this), 1e18));
+    //        return price_tar_usr.mul(price_usr_usd).div(1e18);
+    //    }
+    //
+    //    function Usr_price() public view returns (uint256) {
+    //        return uint256(usrUsdOracle.consultRealtime(address(this), 1e18));
+    //    }
 
     function tar_usd_price() public view returns (uint256) {
         //1e6 precision
-        uint256 price_tar_usr = uint256(tarUsrOracle.consultRealtime(tar_address, 1e18));
-        uint256 price_usr_usd = uint256(usrUsdOracle.consultRealtime(address(this), 1e18));
-        return price_tar_usr.mul(price_usr_usd).div(1e18);
+        uint256 price_tar_usr = uint256(tarUsrOracle.consult(tar_address, PRICE_PRECISION));
+        uint256 price_usr_usd = uint256(usrUsdOracle.consult(address(this), PRICE_PRECISION));
+        return price_tar_usr.mul(price_usr_usd).div(PRICE_PRECISION);
     }
 
     function Usr_price() public view returns (uint256) {
-        return uint256(usrUsdOracle.consultRealtime(address(this), 1e18));
+        return uint256(usrUsdOracle.consult(address(this), PRICE_PRECISION));
     }
+
 
     function tar_usd_24H_price() public view returns (uint256) {
         //1e6 precision
@@ -262,7 +292,7 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
 
     function GetMintFractionalUSROutMin(uint256 collateral_amount, uint256 missing_decimals, address pool) public view returns (uint256, uint256) {
         uint256 tar_price = tar_usd_price();
-       // uint256 global_collateral_ratio = global_collateral_ratio;
+        // uint256 global_collateral_ratio = global_collateral_ratio;
 
         uint256 collateral_amount_d18 = collateral_amount * (10 ** missing_decimals);
 

@@ -16,6 +16,7 @@ contract UsrIncentive is Owned {
         address account;
         uint256 amount;
     }
+
     struct UserReward {
         address account;
         uint256 reward;
@@ -54,7 +55,7 @@ contract UsrIncentive is Owned {
     uint256 private  _tarUsd24H = 0;
     uint256 public fmRound = 0;
     //round->level->addr->value
-    mapping(uint256 =>  mapping(address => UserReward)) public rewards;
+    mapping(uint256 => mapping(address => UserReward)) public rewards;
 
     modifier onlyUsr() {
         require(UsrAddress == msg.sender, "only Usr");
@@ -201,6 +202,12 @@ contract UsrIncentive is Owned {
             if (USR.usrUsd24HOracleCanUpdate() == true) {
                 USR.usrUsd24HOracleUpdate();
             }
+            if (USR.usrUsd1HOracleCanUpdate() == true) {
+                USR.usrUsd1HOracleUpdate();
+            }
+            if (USR.tarUsr1HOracleCanUpdate() == true) {
+                USR.tarUsr1HOracleUpdate();
+            }
 
             _tarUsd24H = USR.tar_usd_24H_price();
             if (_tarUsd24H < lastTarUsd24H) {
@@ -213,13 +220,13 @@ contract UsrIncentive is Owned {
             if (tarUsd != 0 && tarUsd24H != 0) {
                 if (tarUsd <= tarUsd24H.mul(97).div(100)) {
                     IsPenalty = true;
-
                 }
+
                 if (tarUsd >= tarUsd24H) {
                     IsPenalty = false;
                 }
             }
-            if (_IsPair(recipient) && (tarUsd.div(10 ** PRICE_PRECISION) > curRound - 1)) {
+            if (_IsPair(recipient) && (tarUsd.div(10 * PRICE_PRECISION) > curRound - 1)) {
                 curRound = curRound + 1;
                 emit StartMintRound(curRound - 1);
             }
@@ -254,6 +261,7 @@ contract UsrIncentive is Owned {
                     //UserLast100Trans.push(UserTrans(sender, amount));
                     curTransIndex = curTransIndex + 1;
                     lastTransTimeStamp = curTime;
+                    emit FOMOBuy();
                 }
             }
         }
@@ -301,7 +309,7 @@ contract UsrIncentive is Owned {
         //reward 100x
         if (info.account != address(0)) {
             buyTar(reward, info.account);
-            rewards[fmRound][info.account] = UserReward(info.account,reward,1);
+            rewards[fmRound][info.account] = UserReward(info.account, reward, 1);
         }
 
     }
@@ -310,14 +318,14 @@ contract UsrIncentive is Owned {
         uint256 reward = info.amount.mul(10);
         //reward 10x
         buyTar(reward, info.account);
-        rewards[fmRound][info.account] = UserReward(info.account,reward,2);
+        rewards[fmRound][info.account] = UserReward(info.account, reward, 2);
     }
 
     function sendLast90(UserTrans memory info) internal {
         uint256 reward = info.amount.mul(10).div(100);
         //reward 10%
         buyTar(reward, info.account);
-        rewards[fmRound][info.account] = UserReward(info.account,reward,3);
+        rewards[fmRound][info.account] = UserReward(info.account, reward, 3);
     }
 
     function sendPercentChampion(UserTrans memory info, uint256 bal) internal {
@@ -325,7 +333,7 @@ contract UsrIncentive is Owned {
         //reward 90.8/100
         if (info.account != address(0)) {
             AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
-            rewards[fmRound][info.account] = UserReward(info.account,reward,1);
+            rewards[fmRound][info.account] = UserReward(info.account, reward, 1);
         }
 
     }
@@ -335,7 +343,7 @@ contract UsrIncentive is Owned {
         //reward each 1/100
 
         AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
-        rewards[fmRound][info.account] = UserReward(info.account,reward,2);
+        rewards[fmRound][info.account] = UserReward(info.account, reward, 2);
         // buyTar(reward, info.account);
     }
 
@@ -344,7 +352,7 @@ contract UsrIncentive is Owned {
         //reward 0.09/100
         // each 0.09/(100*90)
         AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
-        rewards[fmRound][info.account] = UserReward(info.account,reward,3);
+        rewards[fmRound][info.account] = UserReward(info.account, reward, 3);
     }
 
     function dispatchReward() public onlyByOwnerGovernanceOrController {
@@ -529,5 +537,6 @@ contract UsrIncentive is Owned {
     event FOMOSuccess(uint curTransIndex, uint256 bal, uint256 round);
     event StartMintRound(uint256 round);
     event StartFOMO();
+    event FOMOBuy();
     event RewardDispatched(uint256 round);
 }
