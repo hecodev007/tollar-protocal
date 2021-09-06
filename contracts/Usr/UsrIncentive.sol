@@ -530,22 +530,6 @@ contract UsrIncentive is Owned {
         USR.superTransfer(intensiveAddress, account, amount);
     }
 
-//    function RoundMintTest() external onlyByOwnerGovernanceOrController {
-//        uint256 tarUsd = USR.tar_usd_price();
-//        if ((tarUsd.div(10 * PRICE_PRECISION) > curRound - 1)) {
-//            curRound = curRound + 1;
-//            console.log("1");
-//        }
-//        for (uint i = 1; i < 10; i++) {
-//            tarUsd = tarUsd.mul(i * 10);
-//            if ((tarUsd.div(10 * PRICE_PRECISION) > curRound - 1)) {
-//                curRound = curRound + 1;
-//            }
-//            console.log("curRound:", curRound - 1);
-//        }
-//
-//
-//    }
 
     // event FOMOSuccess(uint curTransIndex);
     event IntensiveAddress(address addr, uint256 amount);
