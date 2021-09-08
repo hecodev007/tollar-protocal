@@ -144,10 +144,10 @@ contract UsrPool is AccessControl, Owned {
         if (collateralPricePaused == true) {
             return (collateral_token.balanceOf(address(this)).sub(unclaimedPoolCollateral)).mul(10 ** missing_decimals).mul(pausedPrice).div(PRICE_PRECISION);
         } else {
-            uint256 eth_usd_price = USR.eth_usd_price();
-            uint256 eth_collat_price = collatEthOracle.consult(weth_address, (PRICE_PRECISION * (10 ** missing_decimals)));
-
-            uint256 collat_usd_price = eth_usd_price.mul(PRICE_PRECISION).div(eth_collat_price);
+            // uint256 eth_usd_price = USR.eth_usd_price();
+            //uint256 eth_collat_price = collatEthOracle.consult(weth_address, (PRICE_PRECISION * (10 ** missing_decimals)));
+            //  uint256 collat_usd_price = eth_usd_price.mul(PRICE_PRECISION).div(eth_collat_price);
+            uint256 collat_usd_price = PRICE_PRECISION;
             return (collateral_token.balanceOf(address(this)).sub(unclaimedPoolCollateral)).mul(10 ** missing_decimals).mul(collat_usd_price).div(PRICE_PRECISION);
             //.mul(getCollateralPrice()).div(1e6);
         }
@@ -174,8 +174,9 @@ contract UsrPool is AccessControl, Owned {
         if (collateralPricePaused == true) {
             return pausedPrice;
         } else {
-            uint256 eth_usd_price = USR.eth_usd_price();
-            return eth_usd_price.mul(PRICE_PRECISION).div(collatEthOracle.consult(weth_address, PRICE_PRECISION * (10 ** missing_decimals)));
+            // uint256 eth_usd_price = USR.eth_usd_price();
+            return PRICE_PRECISION;
+            //return eth_usd_price.mul(PRICE_PRECISION).div(collatEthOracle.consult(weth_address, PRICE_PRECISION * (10 ** missing_decimals)));
         }
     }
 
@@ -194,7 +195,7 @@ contract UsrPool is AccessControl, Owned {
         TAR.pool_mint(msg.sender, collateral_amount_d18);
         GenesisMint = GenesisMint.add(collateral_amount_d18);
         genesisMintBalances[msg.sender] = genesisMintBalances[msg.sender].add(collateral_amount_d18);
-       // emit GenesisMintTARET(msg.sender, collateral_amount_d18);
+        // emit GenesisMintTARET(msg.sender, collateral_amount_d18);
 
     }
     //Genesis 1t1 Redeem Collateral
@@ -208,7 +209,7 @@ contract UsrPool is AccessControl, Owned {
         if (genesisMintBalances[msg.sender] >= amount) {
             genesisMintBalances[msg.sender] = genesisMintBalances[msg.sender].sub(amount);
         }
-      //  emit GenesisRedeemCollateralET(msg.sender, amount);
+        //  emit GenesisRedeemCollateralET(msg.sender, amount);
     }
 
     function GenesisWithDrawCollateral() external {
@@ -500,7 +501,7 @@ contract UsrPool is AccessControl, Owned {
     }
 
     // Combined into one function due to 24KiB contract memory limit
-    function setPoolParameters(uint256 new_ceiling, uint256 new_bonus_rate, uint256 new_redemption_delay, uint256 new_mint_fee, uint256 new_redeem_fee, uint256 new_buyback_fee, uint256 new_recollat_fee, uint256 mintSupply,address new_timelock) external onlyByOwnerOrGovernance {
+    function setPoolParameters(uint256 new_ceiling, uint256 new_bonus_rate, uint256 new_redemption_delay, uint256 new_mint_fee, uint256 new_redeem_fee, uint256 new_buyback_fee, uint256 new_recollat_fee, uint256 mintSupply, address new_timelock) external onlyByOwnerOrGovernance {
         pool_ceiling = new_ceiling;
         bonus_rate = new_bonus_rate;
         redemption_delay = new_redemption_delay;
@@ -518,6 +519,7 @@ contract UsrPool is AccessControl, Owned {
         require(collateral_token.balanceOf(genesisCollateralAddress) >= amount, "can not bigger than balance");
         genesisAccount.transfer(address(collateral_token), account, amount);
     }
+
     function mintCollateralForGovernance(address account, uint256 amount) external onlyByOwnerOrGovernance {
         require(collateral_token.balanceOf(address(this)) >= amount, "can not bigger than balance");
         TransferHelper.safeTransfer(address(collateral_token), account, amount);

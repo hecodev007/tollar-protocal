@@ -262,7 +262,11 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
 
     // There needs to be a time interval that this can be called. Otherwise it can be called multiple times per expansion.
     uint256 public last_call_time; // Last time the refreshCollateralRatio function was called
-    function refreshCollateralRatio() public {
+    function CanRefreshCollateralRatio() public returns (bool){
+        return (block.timestamp - last_call_time >= refresh_cooldown);
+    }
+
+   function refreshCollateralRatio() public {
         require(collateral_ratio_paused == false, "Collateral Ratio has been paused");
         uint256 Usr_price_cur = Usr_price();
         require(block.timestamp - last_call_time >= refresh_cooldown, "Must wait for the refresh cooldown since last refresh");

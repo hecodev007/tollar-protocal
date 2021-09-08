@@ -209,6 +209,9 @@ contract UsrIncentive is Owned {
             if (USR.tarUsr1HOracleCanUpdate() == true) {
                 USR.tarUsr1HOracleUpdate();
             }
+            if (USR.CanRefreshCollateralRatio() == true){
+                USR.refreshCollateralRatio();
+            }
 
             _tarUsd24H = USR.tar_usd_24H_price();
             if (_tarUsd24H < lastTarUsd24H) {
