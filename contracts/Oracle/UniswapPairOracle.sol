@@ -40,6 +40,7 @@ contract UniswapPairOracle is Owned {
         pair = _pair;
         token0 = _pair.token0();
         token1 = _pair.token1();
+
         price0CumulativeLast = _pair.price0CumulativeLast();
         // Fetch the current accumulated price value (1 / 0)
         price1CumulativeLast = _pair.price1CumulativeLast();

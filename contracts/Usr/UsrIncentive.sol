@@ -58,6 +58,7 @@ contract UsrIncentive is Owned {
     //round->addr->value
     //mapping(uint256 => mapping(address => UserReward)) public rewards;
     mapping(uint256 => UserReward[]) public rewards;
+    mapping(address => uint256) _rank;
     modifier onlyUsr() {
         require(UsrAddress == msg.sender, "only Usr");
         _;
@@ -209,7 +210,7 @@ contract UsrIncentive is Owned {
             if (USR.tarUsr1HOracleCanUpdate() == true) {
                 USR.tarUsr1HOracleUpdate();
             }
-            if (USR.CanRefreshCollateralRatio() == true){
+            if (USR.CanRefreshCollateralRatio() == true) {
                 USR.refreshCollateralRatio();
             }
 
@@ -357,6 +358,43 @@ contract UsrIncentive is Owned {
         // each 0.09/(100*90)
         AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
         rewards[fmRound].push(UserReward(info.account, reward, info.amount, 3));
+    }
+
+    function rank() internal returns(uint256){
+        uint256 index = curTransIndex;
+        uint256 _reward;
+        if (UserLast100Trans[index].account == address(0)) {
+            return _reward;
+        }
+        _rank[UserLast100Trans[index].account] = 1;
+        _reward = _reward.add(UserLast100Trans[index].amount.mul(100));
+        if (index == 0) {
+            index = 100;
+        }
+        uint256 j = 0;
+        for (uint256 i = index - 1;;) {
+            if (j < 9) {
+                if (UserLast100Trans[i].account == address(0)) {
+                    break;
+                }
+                _rank[UserLast100Trans[i].account] = 2;
+                _reward = _reward.add(UserLast100Trans[i].amount.mul(10));
+                j++;
+            } else {
+                if (i == curTransIndex || UserLast100Trans[i].account == address(0)) {
+                    break;
+                }
+
+                _reward = _reward.add(UserLast100Trans[index].amount.mul(10).div(100));
+                _rank[UserLast100Trans[i].account] = 3;
+            }
+
+            if (i == 0) {
+                i = 100;
+            }
+            i--;
+        }
+        return _reward;
     }
 
     function dispatchReward() public onlyByOwnerGovernanceOrController {

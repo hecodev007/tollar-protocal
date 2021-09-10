@@ -43,6 +43,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
     }
 
     mapping(uint32 => mapping(address => BalanceInfo)) public Rounds;
+
     mapping(uint32 => mapping(address => RoundInfo)) public RoundsInfo;//round->addr->RoundInfo
     mapping(uint32 => mapping(uint32 => mapping(address => BalanceInfo))) public RoundMintDetail; //round->n times->addr->info
     uint32  public curRoundIndex = 0;
@@ -120,7 +121,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
             RoundsInfo[curRoundIndex][whiteList[i]] = RoundInfo(balances[i], balances[i], 0);
         }
         if (isFinished) {
-            curRoundIndex++;
+            curRoundIndex = curRoundIndex + 1;
             //   addWhiteListTime = 0;
             lastAddWhiteListTime = currentBlockTimestamp();
         }
