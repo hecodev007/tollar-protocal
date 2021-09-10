@@ -36,7 +36,15 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         uint32 lockTime;
     }
 
+    struct RoundInfo {
+        uint256 balance;
+        uint256 total;
+        uint32 nTimes;
+    }
+
     mapping(uint32 => mapping(address => BalanceInfo)) public Rounds;
+    mapping(uint32 => mapping(address => RoundInfo)) public RoundsInfo;//round->addr->RoundInfo
+    mapping(uint32 => mapping(uint32 => mapping(address => BalanceInfo))) public RoundMintDetail; //round->n times->addr->info
     uint32  public curRoundIndex = 0;
     uint32 private addWhiteListTime = 0;
     uint32 private lastAddWhiteListTime = 0;
@@ -108,20 +116,34 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         if (curRoundIndex >= 1) {
             require(lastAddWhiteListTime + 30 * 24 * 60 * 60 <= currentBlockTimestamp(), "interval of each round should be more than 1 month");
         }
-
-        if (addWhiteListTime == 0) {
-            addWhiteListTime = currentBlockTimestamp() + 1 hours;
-        }
         for (uint256 i = 0; i < whiteList.length; i++) {
-            Rounds[curRoundIndex][whiteList[i]] = BalanceInfo(balances[i], balances[i], addWhiteListTime, (curRoundIndex + 12) * 30);
+            RoundsInfo[curRoundIndex][whiteList[i]] = RoundInfo(balances[i], balances[i], 0);
         }
         if (isFinished) {
             curRoundIndex++;
-            addWhiteListTime = 0;
+            //   addWhiteListTime = 0;
             lastAddWhiteListTime = currentBlockTimestamp();
         }
         console.log("AddWhitelist", curRoundIndex);
     }
+    //    function AddWhitelist(address[] memory whiteList, uint256[]  memory balances, bool isFinished) public onlyByOwnerOrGovernance {
+    //        if (curRoundIndex >= 1) {
+    //            require(lastAddWhiteListTime + 30 * 24 * 60 * 60 <= currentBlockTimestamp(), "interval of each round should be more than 1 month");
+    //        }
+    //
+    //        if (addWhiteListTime == 0) {
+    //            addWhiteListTime = currentBlockTimestamp() + 1 hours;
+    //        }
+    //        for (uint256 i = 0; i < whiteList.length; i++) {
+    //            Rounds[curRoundIndex][whiteList[i]] = BalanceInfo(balances[i], balances[i], addWhiteListTime, (curRoundIndex + 12) * 30);
+    //        }
+    //        if (isFinished) {
+    //            curRoundIndex++;
+    //            addWhiteListTime = 0;
+    //            lastAddWhiteListTime = currentBlockTimestamp();
+    //        }
+    //        console.log("AddWhitelist", curRoundIndex);
+    //    }
 
     function RoundMintInfo(address account) view public returns (uint256 total, uint256 mintedAmount, uint256 balance){
         uint256 _totalAmount;
@@ -159,37 +181,80 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         total = total.add(mintBalance[msg.sender]);
     }
 
-    function _roundMintAmount(address account) internal returns (uint256 total){
-        console.log("curRoundIndex:", curRoundIndex);
-        // uint32 dayTime = 24 * 3600;
+    function _CanDrawAmount(address account) internal returns (uint256 total){
+        uint256 total;
         uint32 dayTime = 60;
         for (uint32 i = 0; i < curRoundIndex; i++) {
-            uint32 start = Rounds[i][account].startTime;
-            uint32 curTime = currentBlockTimestamp();
-            if (start == 0 || curTime < start + dayTime) {
+            uint32 nTimes = RoundsInfo[i][account].nTimes;
+            if (nTimes == 0) {
                 continue;
             }
-            uint32 endTime = start + (i + 12) * 30 * dayTime;
-            if (curTime > endTime) {
-                curTime = endTime;
-            }
-            uint32 elapsedDay = (curTime - start) / dayTime;
-            uint256 totalAmount = Rounds[i][account].total;
-            uint256 mintAmount = totalAmount.mul(uint256(elapsedDay)).div(uint256((i + 12) * 30));
-            uint256 mintedAmount = totalAmount.sub(Rounds[i][account].balance);
-            if (mintAmount > mintedAmount) {
-                total = total.add(mintAmount.sub(mintedAmount));
-                //change balance
-                Rounds[i][account].balance = totalAmount.sub(mintAmount);
+            for (uint32 j = 0; j < nTimes; i++) {
+                uint32 start = RoundMintDetail[i][j][account].startTime;
+                uint32 curTime = currentBlockTimestamp();
+                uint256 bal = RoundMintDetail[i][j][account].balance;
+                if (start == 0 || curTime < start + dayTime || bal == 0) {
+                    continue;
+                }
+                uint32 endTime = start + (i + 12) * 30 * dayTime;
+                if (curTime > endTime) {
+                    curTime = endTime;
+                }
+                uint32 elapsedDay = (curTime - start) / dayTime;
+                uint256 totalAmount = RoundMintDetail[i][j][account].total;
+                uint256 drawAmount = totalAmount.mul(uint256(elapsedDay)).div(uint256((i + 12) * 30));
+                uint256 drawedAmount = totalAmount.sub(bal);
+                if (drawAmount > drawedAmount) {
+                    total = total.add(drawAmount.sub(drawedAmount));
+                    //change balance
+                    RoundMintDetail[i][j][account].balance = totalAmount.sub(drawAmount);
+                }
             }
         }
-        total = total.add(mintBalance[msg.sender]);
+        return total;
+    }
+
+
+    function WithDrawMint() public {
+        // require(mintWithDraw[msg.sender] > 0 && lastMint[msg.sender].add(1) <= block.number, "no balance to withdraw");
+        uint256 drawAmount = _CanDrawAmount(msg.sender);
+        require(drawAmount > 0, "drawAmount == 0");
+        require(team_address != address(0) && intensiveAddress != address(0), "system param can not 0 address");
+        if (curRoundIndex <= 10) {
+            _mint(intensiveAddress, drawAmount.mul(30).div(100));
+        } else {
+            _mint(intensiveAddress, drawAmount.mul(20).div(100));
+            _mint(team_address, drawAmount.mul(10).div(100));
+        }
+        _mint(msg.sender, drawAmount.sub(drawAmount.mul(30).div(100)));
+        emit WithDrawMintOne(msg.sender, drawAmount);
+        tar_supply = tar_supply.add(drawAmount);
+        //mintWithDraw[msg.sender] = 0;
+
+    }
+
+
+    function _CanMintAmount(address account) internal returns (uint256 total){
+        console.log("curRoundIndex:", curRoundIndex);
+        // uint32 dayTime = 24 * 3600;
+        // uint32 dayTime = 60;
+        uint256 mintAmount;
+        for (uint32 i = 0; i < curRoundIndex; i++) {
+            uint256 total = RoundsInfo[i][account].total;
+            uint256 balance = RoundsInfo[i][account].balance;
+            uint256 nTimes = RoundsInfo[i][account].nTimes;
+            if (total == 0 || balance == 0 || nTimes == 10) {
+                continue;
+            }
+            mintAmount = mintAmount.add(balance);
+        }
+
     }
 
     function RoundMint(uint256 amount) public {
         require(curRoundIndex > 0 && amount > 0, "round mint not begin ");
-        require(intensiveAddress != address(0), "system param can not 0 address");
-        uint256 mintAmount = _roundMintAmount(msg.sender);
+        // require(intensiveAddress != address(0), "system param can not 0 address");
+        uint256 mintAmount = _CanMintAmount(msg.sender);
         require(mintAmount > 0, "mint amount not available ");
         uint256 realAmount = 0;
         if (mintAmount > amount) {
@@ -200,27 +265,94 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         console.log("realAmount:", realAmount);
 
         TransferHelper.safeTransferFrom(USRStableCoinAddr, msg.sender, address(this), realAmount);
-        mintWithDraw[msg.sender] = mintWithDraw[msg.sender].add(realAmount);
-        mintBalance[msg.sender] = mintAmount.sub(realAmount);
-        lastMint[msg.sender] = block.number;
+
+        uint256 tmpAmount = realAmount;
+        uint32 curTime = currentBlockTimestamp();
+        for (uint32 i = 0; i < curRoundIndex; i++) {
+            uint256 total = RoundsInfo[i][msg.sender].total;
+            uint256 balance = RoundsInfo[i][msg.sender].balance;
+            uint256 nTimes = RoundsInfo[i][msg.sender].nTimes;
+            if (total == 0 || balance == 0 || nTimes == 10) {
+                continue;
+            }
+            RoundsInfo[i][account].nTimes = RoundsInfo[i][msg.sender].nTimes + 1;
+            if (balance < tmpAmount) {
+                RoundsInfo[i][msg.sender].balance = 0;
+                tmpAmount = tmpAmount.sub(balance);
+                RoundMintDetail[i][nTimes + 1][msg.sender] = BalanceInfo(balance, balance, curTime, (i + 12) * 30);
+            } else {
+                RoundsInfo[i][msg.sender].balance = balance.sub(tmpAmount);
+                RoundMintDetail[i][nTimes + 1][msg.sender] = BalanceInfo(tmpAmount, tmpAmount, curTime, (i + 12) * 30);
+                break;
+            }
+        }
         emit RoundMintOne(msg.sender, realAmount);
     }
 
-    function WithDrawMint() public {
-        require(mintWithDraw[msg.sender] > 0 && lastMint[msg.sender].add(1) <= block.number, "no balance to withdraw");
-        require(team_address != address(0) && intensiveAddress != address(0), "system param can not 0 address");
-        if (curRoundIndex <= 10) {
-            _mint(intensiveAddress, mintWithDraw[msg.sender].mul(30).div(100));
-        } else {
-            _mint(intensiveAddress, mintWithDraw[msg.sender].mul(20).div(100));
-            _mint(team_address, mintWithDraw[msg.sender].mul(10).div(100));
-        }
-        _mint(msg.sender, mintWithDraw[msg.sender].sub(mintWithDraw[msg.sender].mul(30).div(100)));
-        emit WithDrawMintOne(msg.sender, mintWithDraw[msg.sender]);
-        tar_supply = tar_supply.add(mintWithDraw[msg.sender]);
-        mintWithDraw[msg.sender] = 0;
 
-    }
+    //    function _roundMintAmount(address account) internal returns (uint256 total){
+    //        console.log("curRoundIndex:", curRoundIndex);
+    //        // uint32 dayTime = 24 * 3600;
+    //        uint32 dayTime = 60;
+    //        for (uint32 i = 0; i < curRoundIndex; i++) {
+    //            uint32 start = Rounds[i][account].startTime;
+    //            uint32 curTime = currentBlockTimestamp();
+    //            if (start == 0 || curTime < start + dayTime) {
+    //                continue;
+    //            }
+    //            uint32 endTime = start + (i + 12) * 30 * dayTime;
+    //            if (curTime > endTime) {
+    //                curTime = endTime;
+    //            }
+    //            uint32 elapsedDay = (curTime - start) / dayTime;
+    //            uint256 totalAmount = Rounds[i][account].total;
+    //            uint256 mintAmount = totalAmount.mul(uint256(elapsedDay)).div(uint256((i + 12) * 30));
+    //            uint256 mintedAmount = totalAmount.sub(Rounds[i][account].balance);
+    //            if (mintAmount > mintedAmount) {
+    //                total = total.add(mintAmount.sub(mintedAmount));
+    //                //change balance
+    //                Rounds[i][account].balance = totalAmount.sub(mintAmount);
+    //            }
+    //        }
+    //        total = total.add(mintBalance[msg.sender]);
+    //    }
+
+
+    //    function RoundMint(uint256 amount) public {
+    //        require(curRoundIndex > 0 && amount > 0, "round mint not begin ");
+    //        require(intensiveAddress != address(0), "system param can not 0 address");
+    //        uint256 mintAmount = _roundMintAmount(msg.sender);
+    //        require(mintAmount > 0, "mint amount not available ");
+    //        uint256 realAmount = 0;
+    //        if (mintAmount > amount) {
+    //            realAmount = amount;
+    //        } else {
+    //            realAmount = mintAmount;
+    //        }
+    //        console.log("realAmount:", realAmount);
+    //
+    //        TransferHelper.safeTransferFrom(USRStableCoinAddr, msg.sender, address(this), realAmount);
+    //        mintWithDraw[msg.sender] = mintWithDraw[msg.sender].add(realAmount);
+    //        mintBalance[msg.sender] = mintAmount.sub(realAmount);
+    //        lastMint[msg.sender] = block.number;
+    //        emit RoundMintOne(msg.sender, realAmount);
+    //    }
+
+    //    function WithDrawMint() public {
+    //        require(mintWithDraw[msg.sender] > 0 && lastMint[msg.sender].add(1) <= block.number, "no balance to withdraw");
+    //        require(team_address != address(0) && intensiveAddress != address(0), "system param can not 0 address");
+    //        if (curRoundIndex <= 10) {
+    //            _mint(intensiveAddress, mintWithDraw[msg.sender].mul(30).div(100));
+    //        } else {
+    //            _mint(intensiveAddress, mintWithDraw[msg.sender].mul(20).div(100));
+    //            _mint(team_address, mintWithDraw[msg.sender].mul(10).div(100));
+    //        }
+    //        _mint(msg.sender, mintWithDraw[msg.sender].sub(mintWithDraw[msg.sender].mul(30).div(100)));
+    //        emit WithDrawMintOne(msg.sender, mintWithDraw[msg.sender]);
+    //        tar_supply = tar_supply.add(mintWithDraw[msg.sender]);
+    //        mintWithDraw[msg.sender] = 0;
+    //
+    //    }
 
     function setTimelock(address new_timelock) external onlyByOwnerOrGovernance {
         require(new_timelock != address(0), "Timelock address cannot be 0");

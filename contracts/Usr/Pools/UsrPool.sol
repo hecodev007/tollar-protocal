@@ -180,11 +180,11 @@ contract UsrPool is AccessControl, Owned {
         }
     }
 
-    function setCollatETHOracle(address _collateral_weth_oracle_address, address _weth_address) external onlyByOwnerOrGovernance {
-        collat_eth_oracle_address = _collateral_weth_oracle_address;
-        collatEthOracle = UniswapPairOracle(_collateral_weth_oracle_address);
-        weth_address = _weth_address;
-    }
+//    function setCollatETHOracle(address _collateral_weth_oracle_address, address _weth_address) external onlyByOwnerOrGovernance {
+//        collat_eth_oracle_address = _collateral_weth_oracle_address;
+//        collatEthOracle = UniswapPairOracle(_collateral_weth_oracle_address);
+//        weth_address = _weth_address;
+//    }
 
     //Genesis 1t1 mint tar
     function GenesisMintTAR(uint256 collateral_amount) external {
@@ -460,6 +460,12 @@ contract UsrPool is AccessControl, Owned {
 
     /* ========== RESTRICTED FUNCTIONS ========== */
 
+    function toggleMinting() external {
+        require(hasRole(MINT_PAUSER, msg.sender));
+        mintPaused = !mintPaused;
+
+        emit MintingToggled(mintPaused);
+    }
 
     function toggleGenesisMinting() external onlyByOwnerOrGovernance {
         GenesisMintStart = !GenesisMintStart;

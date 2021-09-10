@@ -254,9 +254,6 @@ contract UsrIncentive is Owned {
                     }
                     //emit FOMOSuccess(curTransIndex);
                     fmRound = fmRound.add(1);
-                    //                    for(uint i =0;i<UserLast100Trans.length;i++){
-                    //                        RewardUsers[fmRound].push(UserLast100Trans[i]);
-                    //                    }
                     emit FOMOSuccess(curTransIndex, USR.superBalanceOf(intensiveAddress).mul(10).div(100), fmRound);
                 }
 
