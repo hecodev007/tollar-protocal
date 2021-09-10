@@ -182,32 +182,30 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
     }
 
     function _CanDrawAmount(address account) internal returns (uint256 total){
-        uint256 total;
+       // uint256 total;
         uint32 dayTime = 60;
+        uint32 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
             if (nTimes == 0) {
                 continue;
             }
-            for (uint32 j = 0; j < nTimes; i++) {
-                uint32 start = RoundMintDetail[i][j][account].startTime;
-                uint32 curTime = currentBlockTimestamp();
-                uint256 bal = RoundMintDetail[i][j][account].balance;
-                if (start == 0 || curTime < start + dayTime || bal == 0) {
+            for (uint32 j = 0; j < nTimes; j++) {
+                BalanceInfo memory bl =  RoundMintDetail[i][j][account];
+                if (bl.startTime == 0 || curTime < bl.startTime + dayTime || bl.balance == 0) {
                     continue;
                 }
-                uint32 endTime = start + (i + 12) * 30 * dayTime;
+                uint32 endTime = bl.startTime + (i + 12) * 30 * dayTime;
                 if (curTime > endTime) {
                     curTime = endTime;
                 }
-                uint32 elapsedDay = (curTime - start) / dayTime;
-                uint256 totalAmount = RoundMintDetail[i][j][account].total;
-                uint256 drawAmount = totalAmount.mul(uint256(elapsedDay)).div(uint256((i + 12) * 30));
-                uint256 drawedAmount = totalAmount.sub(bal);
+                uint32 elapsedDay = (curTime - bl.startTime) / dayTime;
+                uint256 drawAmount = bl.total.mul(uint256(elapsedDay)).div(uint256((i + 12) * 30));
+                uint256 drawedAmount = bl.total.sub(bl.balance);
                 if (drawAmount > drawedAmount) {
                     total = total.add(drawAmount.sub(drawedAmount));
                     //change balance
-                    RoundMintDetail[i][j][account].balance = totalAmount.sub(drawAmount);
+                    RoundMintDetail[i][j][account].balance = bl.total.sub(drawAmount);
                 }
             }
         }
@@ -271,11 +269,11 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint256 total = RoundsInfo[i][msg.sender].total;
             uint256 balance = RoundsInfo[i][msg.sender].balance;
-            uint256 nTimes = RoundsInfo[i][msg.sender].nTimes;
+            uint32 nTimes = RoundsInfo[i][msg.sender].nTimes;
             if (total == 0 || balance == 0 || nTimes == 10) {
                 continue;
             }
-            RoundsInfo[i][account].nTimes = RoundsInfo[i][msg.sender].nTimes + 1;
+            RoundsInfo[i][msg.sender].nTimes = RoundsInfo[i][msg.sender].nTimes + 1;
             if (balance < tmpAmount) {
                 RoundsInfo[i][msg.sender].balance = 0;
                 tmpAmount = tmpAmount.sub(balance);
