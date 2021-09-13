@@ -360,7 +360,7 @@ contract UsrIncentive is Owned {
         rewards[fmRound].push(UserReward(info.account, reward, info.amount, 3));
     }
 
-    function rank() internal returns(uint256){
+    function rank() internal returns (uint256){
         uint256 index = curTransIndex;
         uint256 _reward;
         if (UserLast100Trans[index].account == address(0)) {
@@ -397,10 +397,62 @@ contract UsrIncentive is Owned {
         return _reward;
     }
 
+
+    function dispatch(uint256 calReward, uint256 realReward) internal {
+
+        for (uint256 i = 0; i < UserLast100Trans.length; i++) {
+
+            if (UserLast100Trans[i].account == address(0)) {
+                break;
+            }
+            if (_rank[UserLast100Trans[i].account] == 1) {
+                uint256 reward = UserLast100Trans[i].amount.mul(100).mul(realReward).div(calReward);
+                if (reward>0){
+                    AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
+                }
+                rewards[fmRound].push(UserReward(info.account, reward, info.amount, 1));
+            } else if (_rank[UserLast100Trans[i].account] == 2) {
+                uint256 reward = UserLast100Trans[i].amount.mul(10).mul(realReward).div(calReward);
+                if (reward>0){
+                    AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
+                }
+                rewards[fmRound].push(UserReward(info.account, reward, info.amount, 2));
+            } else if (_rank[UserLast100Trans[i].account] == 3) {
+                uint256 reward = UserLast100Trans[i].amount.mul(10).div(100).mul(realReward).div(calReward);
+                if (reward>0){
+                    AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
+                }
+                rewards[fmRound].push(UserReward(info.account, reward, info.amount, 3));
+            }
+
+
+        }
+
+
+    }
+
+    //this is new one
+    function dispatchFMReward() public onlyByOwnerGovernanceOrController {
+        require(SuccessFOMO == true, "need successFoMo");
+        uint256 _reward = rank();
+        uint256 balUsr = USR.balanceOf(intensiveAddress).mul(10).div(100);
+        require(balUsr > 0, "usr bal bigger than 0");
+        uint256 tarBal = TAR.balanceOf(intensiveAddress).mul(10).div(100);
+        //dispatch logic
+        uint256 bal = buyTar(balUsr, intensiveAddress);
+        uint256 calTar = bal.mul(_reward).div(balUsr);
+        bal = bal.add(tarBal);
+        if (calTar > bal) {//percent
+            dispatch(_reward, bal);
+        } else {//100%
+            dispatch(calTar);
+        }
+
+    }
+
     function dispatchReward() public onlyByOwnerGovernanceOrController {
         require(SuccessFOMO == true, "need successFoMo");
         //dispatch logic
-
         if (curTransIndex >= 9) {//last 10
             for (uint i = curTransIndex - 9; i <= curTransIndex - 1; i++) {//last 9
                 if (UserLast100Trans[i].account == address(0)) {
