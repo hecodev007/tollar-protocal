@@ -407,27 +407,25 @@ contract UsrIncentive is Owned {
             }
             if (_rank[UserLast100Trans[i].account] == 1) {
                 uint256 reward = UserLast100Trans[i].amount.mul(100).mul(realReward).div(calReward);
-                if (reward>0){
-                    AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
+                if (reward > 0) {
+                    AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
-                rewards[fmRound].push(UserReward(info.account, reward, info.amount, 1));
+                rewards[fmRound].push(UserReward(UserLast100Trans[i].account, reward, UserLast100Trans[i].amount, 1));
             } else if (_rank[UserLast100Trans[i].account] == 2) {
                 uint256 reward = UserLast100Trans[i].amount.mul(10).mul(realReward).div(calReward);
-                if (reward>0){
-                    AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
+                if (reward > 0) {
+                    AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
-                rewards[fmRound].push(UserReward(info.account, reward, info.amount, 2));
+                rewards[fmRound].push(UserReward(UserLast100Trans[i].account, reward, UserLast100Trans[i].amount, 2));
             } else if (_rank[UserLast100Trans[i].account] == 3) {
                 uint256 reward = UserLast100Trans[i].amount.mul(10).div(100).mul(realReward).div(calReward);
-                if (reward>0){
-                    AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
+                if (reward > 0) {
+                    AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
-                rewards[fmRound].push(UserReward(info.account, reward, info.amount, 3));
+                rewards[fmRound].push(UserReward(UserLast100Trans[i].account, reward, UserLast100Trans[i].amount, 3));
             }
 
-
         }
-
 
     }
 
@@ -445,7 +443,7 @@ contract UsrIncentive is Owned {
         if (calTar > bal) {//percent
             dispatch(_reward, bal);
         } else {//100%
-            dispatch(calTar);
+            dispatch(_reward, calTar);
         }
 
     }
