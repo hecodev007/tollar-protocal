@@ -188,7 +188,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
     //        total = total.add(mintBalance[msg.sender]);
     //    }
 
-    function CanDrawAmount(address account) public returns (uint256 total){
+    function CanDrawAmount(address account) public view returns (uint256 total){
         uint256 total;
         uint32 dayTime = 60;
         uint32 curTime = currentBlockTimestamp();
@@ -270,7 +270,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
     }
 
 
-    function _CanMintAmount(address account) public returns (uint256 total){
+    function _CanMintAmount(address account) public view returns (uint256 total){
         console.log("curRoundIndex:", curRoundIndex);
         // uint32 dayTime = 24 * 3600;
         // uint32 dayTime = 60;
