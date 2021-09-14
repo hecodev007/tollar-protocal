@@ -309,56 +309,56 @@ contract UsrIncentive is Owned {
     }
 
 
-    function sendChampion(UserTrans memory info) internal {
-        uint256 reward = info.amount.mul(100);
-        //reward 100x
-        if (info.account != address(0)) {
-            buyTar(reward, info.account);
-            rewards[fmRound].push(UserReward(info.account, reward, info.amount, 1));
-        }
-
-    }
-
-    function sendLast9(UserTrans memory info) internal {
-        uint256 reward = info.amount.mul(10);
-        //reward 10x
-        buyTar(reward, info.account);
-        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 2));
-    }
-
-    function sendLast90(UserTrans memory info) internal {
-        uint256 reward = info.amount.mul(10).div(100);
-        //reward 10%
-        buyTar(reward, info.account);
-        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 3));
-    }
-
-    function sendPercentChampion(UserTrans memory info, uint256 bal) internal {
-        uint256 reward = bal.mul(908).div(1000);
-        //reward 90.8/100
-        if (info.account != address(0)) {
-            AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
-            rewards[fmRound].push(UserReward(info.account, reward, info.amount, 1));
-        }
-
-    }
-
-    function sendPercentLast9(UserTrans memory info, uint256 bal) internal {
-        uint256 reward = bal.div(100);
-        //reward each 1/100
-
-        AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
-        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 2));
-        // buyTar(reward, info.account);
-    }
-
-    function sendPercentLast90(UserTrans memory info, uint256 bal) internal {
-        uint256 reward = bal.div(100000);
-        //reward 0.09/100
-        // each 0.09/(100*90)
-        AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
-        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 3));
-    }
+    //    function sendChampion(UserTrans memory info) internal {
+    //        uint256 reward = info.amount.mul(100);
+    //        //reward 100x
+    //        if (info.account != address(0)) {
+    //            buyTar(reward, info.account);
+    //            rewards[fmRound].push(UserReward(info.account, reward, info.amount, 1));
+    //        }
+    //
+    //    }
+    //
+    //    function sendLast9(UserTrans memory info) internal {
+    //        uint256 reward = info.amount.mul(10);
+    //        //reward 10x
+    //        buyTar(reward, info.account);
+    //        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 2));
+    //    }
+    //
+    //    function sendLast90(UserTrans memory info) internal {
+    //        uint256 reward = info.amount.mul(10).div(100);
+    //        //reward 10%
+    //        buyTar(reward, info.account);
+    //        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 3));
+    //    }
+    //
+    //    function sendPercentChampion(UserTrans memory info, uint256 bal) internal {
+    //        uint256 reward = bal.mul(908).div(1000);
+    //        //reward 90.8/100
+    //        if (info.account != address(0)) {
+    //            AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
+    //            rewards[fmRound].push(UserReward(info.account, reward, info.amount, 1));
+    //        }
+    //
+    //    }
+    //
+    //    function sendPercentLast9(UserTrans memory info, uint256 bal) internal {
+    //        uint256 reward = bal.div(100);
+    //        //reward each 1/100
+    //
+    //        AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
+    //        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 2));
+    //        // buyTar(reward, info.account);
+    //    }
+    //
+    //    function sendPercentLast90(UserTrans memory info, uint256 bal) internal {
+    //        uint256 reward = bal.div(100000);
+    //        //reward 0.09/100
+    //        // each 0.09/(100*90)
+    //        AccountAddress(intensiveAddress).transfer(TarAddress, info.account, reward);
+    //        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 3));
+    //    }
 
     function rank() internal returns (uint256){
         uint256 index = curTransIndex;
@@ -445,154 +445,158 @@ contract UsrIncentive is Owned {
         } else {//100%
             dispatch(_reward, calTar);
         }
-
-    }
-
-    function dispatchReward() public onlyByOwnerGovernanceOrController {
-        require(SuccessFOMO == true, "need successFoMo");
-        //dispatch logic
-        if (curTransIndex >= 9) {//last 10
-            for (uint i = curTransIndex - 9; i <= curTransIndex - 1; i++) {//last 9
-                if (UserLast100Trans[i].account == address(0)) {
-                    break;
-                }
-                sendLast9(UserLast100Trans[i]);
-
-            }
-            //cur trans index is last one
-            sendChampion(UserLast100Trans[curTransIndex]);
-
-            for (uint i = curTransIndex + 1; i < UserLast100Trans.length; i++) {
-                if (UserLast100Trans[i].account == address(0)) {
-                    break;
-                }
-                sendLast90(UserLast100Trans[i]);
-
-            }
-            for (uint i = 0; i < curTransIndex - 9; i++) {
-                if (UserLast100Trans[i].account == address(0)) {
-                    break;
-                }
-                sendLast90(UserLast100Trans[i]);
-
-            }
-
-        } else {
-            for (uint i = 0; i < curTransIndex; i++) {//last 9
-                if (UserLast100Trans[i].account == address(0)) {
-                    break;
-                }
-                sendLast9(UserLast100Trans[i]);
-
-            }
-            //cur trans index is last one
-            sendChampion(UserLast100Trans[curTransIndex]);
-
-            if (curTransIndex + UserLast100Trans.length > 10) {
-                for (uint i = curTransIndex + 1; i <= curTransIndex + UserLast100Trans.length - 10; i++) {
-                    if (UserLast100Trans[i].account == address(0)) {
-                        break;
-                    }
-                    sendLast90(UserLast100Trans[i]);
-
-                }
-            }
-
-
-            if (UserLast100Trans.length > 9) {
-                for (uint i = curTransIndex + UserLast100Trans.length - 9; i < UserLast100Trans.length; i++) {
-                    if (UserLast100Trans[i].account == address(0)) {
-                        break;
-                    }
-                    sendLast9(UserLast100Trans[i]);
-
-                }
-            }
-
-        }
-
         curTransIndex = 0;
         SuccessFOMO = false;
         delete UserLast100Trans;
         emit RewardDispatched(fmRound);
+
     }
 
-
-    function dispatchRewardPercent() public onlyByOwnerGovernanceOrController {
-
-        require(SuccessFOMO, "SuccessFOMO");
-        uint256 balUsr = USR.balanceOf(intensiveAddress).mul(10).div(100);
-        require(balUsr > 0, "usr bal bigger than 0");
-        uint256 tarBal = TAR.balanceOf(intensiveAddress).mul(10).div(100);
-        //dispatch logic
-        uint256 bal = buyTar(balUsr, intensiveAddress);
-        bal = bal.add(tarBal);
-        require(bal > 100000, "tar'bal>100000");
-        if (curTransIndex >= 9) {//last 10
-            for (uint i = curTransIndex - 9; i <= curTransIndex - 1; i++) {//last 9
-                if (UserLast100Trans[i].account == address(0)) {
-                    break;
-                }
-                sendPercentLast9(UserLast100Trans[i], bal);
-
-            }
-            //cur trans index is last one
-            sendPercentChampion(UserLast100Trans[curTransIndex], bal);
-
-            for (uint i = curTransIndex + 1; i < UserLast100Trans.length; i++) {
-                if (UserLast100Trans[i].account == address(0)) {
-                    break;
-                }
-                sendPercentLast90(UserLast100Trans[i], bal);
-
-            }
-            for (uint i = 0; i < curTransIndex - 9; i++) {
-                if (UserLast100Trans[i].account == address(0)) {
-                    break;
-                }
-                sendPercentLast90(UserLast100Trans[i], bal);
-
-            }
-
-        } else {
-            for (uint i = 0; i < curTransIndex; i++) {//last 9
-                if (UserLast100Trans[i].account == address(0)) {
-                    break;
-                }
-                sendPercentLast9(UserLast100Trans[i], bal);
-
-            }
-            //cur trans index is last one
-            sendPercentChampion(UserLast100Trans[curTransIndex], bal);
-
-            if (curTransIndex + UserLast100Trans.length > 10) {
-                for (uint i = curTransIndex + 1; i <= curTransIndex + UserLast100Trans.length - 10; i++) {
-                    if (UserLast100Trans[i].account == address(0)) {
-                        break;
-                    }
-                    sendPercentLast90(UserLast100Trans[i], bal);
-
-                }
-            }
-
-
-            if (UserLast100Trans.length > 9) {
-                for (uint i = curTransIndex + UserLast100Trans.length - 9; i < UserLast100Trans.length; i++) {
-                    if (UserLast100Trans[i].account == address(0)) {
-                        break;
-                    }
-                    sendPercentLast9(UserLast100Trans[i], bal);
-
-                }
-            }
-
-        }
-
-        curTransIndex = 0;
-        SuccessFOMO = false;
-        delete UserLast100Trans;
-        emit RewardDispatched(fmRound);
-    }
+    //    function dispatchReward() public onlyByOwnerGovernanceOrController {
+    //        require(SuccessFOMO == true, "need successFoMo");
+    //        //dispatch logic
+    //        if (curTransIndex >= 9) {//last 10
+    //            for (uint i = curTransIndex - 9; i <= curTransIndex - 1; i++) {//last 9
+    //                if (UserLast100Trans[i].account == address(0)) {
+    //                    break;
+    //                }
+    //                sendLast9(UserLast100Trans[i]);
+    //
+    //            }
+    //            //cur trans index is last one
+    //            sendChampion(UserLast100Trans[curTransIndex]);
+    //
+    //            for (uint i = curTransIndex + 1; i < UserLast100Trans.length; i++) {
+    //                if (UserLast100Trans[i].account == address(0)) {
+    //                    break;
+    //                }
+    //                sendLast90(UserLast100Trans[i]);
+    //
+    //            }
+    //            for (uint i = 0; i < curTransIndex - 9; i++) {
+    //                if (UserLast100Trans[i].account == address(0)) {
+    //                    break;
+    //                }
+    //                sendLast90(UserLast100Trans[i]);
+    //
+    //            }
+    //
+    //        } else {
+    //            for (uint i = 0; i < curTransIndex; i++) {//last 9
+    //                if (UserLast100Trans[i].account == address(0)) {
+    //                    break;
+    //                }
+    //                sendLast9(UserLast100Trans[i]);
+    //
+    //            }
+    //            //cur trans index is last one
+    //            sendChampion(UserLast100Trans[curTransIndex]);
+    //
+    //            if (curTransIndex + UserLast100Trans.length > 10) {
+    //                for (uint i = curTransIndex + 1; i <= curTransIndex + UserLast100Trans.length - 10; i++) {
+    //                    if (UserLast100Trans[i].account == address(0)) {
+    //                        break;
+    //                    }
+    //                    sendLast90(UserLast100Trans[i]);
+    //
+    //                }
+    //            }
+    //
+    //
+    //            if (UserLast100Trans.length > 9) {
+    //                for (uint i = curTransIndex + UserLast100Trans.length - 9; i < UserLast100Trans.length; i++) {
+    //                    if (UserLast100Trans[i].account == address(0)) {
+    //                        break;
+    //                    }
+    //                    sendLast9(UserLast100Trans[i]);
+    //
+    //                }
+    //            }
+    //
+    //        }
+    //
+    //        curTransIndex = 0;
+    //        SuccessFOMO = false;
+    //        delete UserLast100Trans;
+    //        emit RewardDispatched(fmRound);
+    //    }
+    //
+    //
+    //    function dispatchRewardPercent() public onlyByOwnerGovernanceOrController {
+    //
+    //        require(SuccessFOMO, "SuccessFOMO");
+    //        uint256 balUsr = USR.balanceOf(intensiveAddress).mul(10).div(100);
+    //        require(balUsr > 0, "usr bal bigger than 0");
+    //        uint256 tarBal = TAR.balanceOf(intensiveAddress).mul(10).div(100);
+    //        //dispatch logic
+    //        uint256 bal = buyTar(balUsr, intensiveAddress);
+    //        bal = bal.add(tarBal);
+    //        require(bal > 100000, "tar'bal>100000");
+    //        if (curTransIndex >= 9) {//last 10
+    //            for (uint i = curTransIndex - 9; i <= curTransIndex - 1; i++) {//last 9
+    //                if (UserLast100Trans[i].account == address(0)) {
+    //                    break;
+    //                }
+    //                sendPercentLast9(UserLast100Trans[i], bal);
+    //
+    //            }
+    //            //cur trans index is last one
+    //            sendPercentChampion(UserLast100Trans[curTransIndex], bal);
+    //
+    //            for (uint i = curTransIndex + 1; i < UserLast100Trans.length; i++) {
+    //                if (UserLast100Trans[i].account == address(0)) {
+    //                    break;
+    //                }
+    //                sendPercentLast90(UserLast100Trans[i], bal);
+    //
+    //            }
+    //            for (uint i = 0; i < curTransIndex - 9; i++) {
+    //                if (UserLast100Trans[i].account == address(0)) {
+    //                    break;
+    //                }
+    //                sendPercentLast90(UserLast100Trans[i], bal);
+    //
+    //            }
+    //
+    //        } else {
+    //            for (uint i = 0; i < curTransIndex; i++) {//last 9
+    //                if (UserLast100Trans[i].account == address(0)) {
+    //                    break;
+    //                }
+    //                sendPercentLast9(UserLast100Trans[i], bal);
+    //
+    //            }
+    //            //cur trans index is last one
+    //            sendPercentChampion(UserLast100Trans[curTransIndex], bal);
+    //
+    //            if (curTransIndex + UserLast100Trans.length > 10) {
+    //                for (uint i = curTransIndex + 1; i <= curTransIndex + UserLast100Trans.length - 10; i++) {
+    //                    if (UserLast100Trans[i].account == address(0)) {
+    //                        break;
+    //                    }
+    //                    sendPercentLast90(UserLast100Trans[i], bal);
+    //
+    //                }
+    //            }
+    //
+    //
+    //            if (UserLast100Trans.length > 9) {
+    //                for (uint i = curTransIndex + UserLast100Trans.length - 9; i < UserLast100Trans.length; i++) {
+    //                    if (UserLast100Trans[i].account == address(0)) {
+    //                        break;
+    //                    }
+    //                    sendPercentLast9(UserLast100Trans[i], bal);
+    //
+    //                }
+    //            }
+    //
+    //        }
+    //
+    //        curTransIndex = 0;
+    //        SuccessFOMO = false;
+    //        delete UserLast100Trans;
+    //        emit RewardDispatched(fmRound);
+    //    }
 
 
     function getIncentiveBalance() public view returns (uint256) {
