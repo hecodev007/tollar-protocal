@@ -197,7 +197,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
             if (nTimes == 0) {
                 continue;
             }
-            for (uint32 j = 0; j < nTimes; j++) {
+            for (uint32 j = 1; j <= nTimes; j++) {
                 BalanceInfo memory bl = RoundMintDetail[i][j][account];
                 if (bl.startTime == 0 || curTime < bl.startTime + dayTime || bl.balance == 0) {
                     continue;
@@ -225,10 +225,11 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
         uint32 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
+            console.log("nTimes:",nTimes);
             if (nTimes == 0) {
                 continue;
             }
-            for (uint32 j = 0; j < nTimes; j++) {
+            for (uint32 j = 1; j <= nTimes; j++) {
                 BalanceInfo memory bl = RoundMintDetail[i][j][account];
                 if (bl.startTime == 0 || curTime < bl.startTime + dayTime || bl.balance == 0) {
                     continue;
@@ -240,6 +241,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
                 uint32 elapsedDay = (curTime - bl.startTime) / dayTime;
                 uint256 drawAmount = bl.total.mul(uint256(elapsedDay)).div(uint256((i + 12) * 30));
                 uint256 drawedAmount = bl.total.sub(bl.balance);
+                //console.log("_CanDrawAmount:",elapsedDay,drawAmount,drawedAmount);
                 if (drawAmount > drawedAmount) {
                     total = total.add(drawAmount.sub(drawedAmount));
                     //change balance
@@ -247,6 +249,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
                 }
             }
         }
+        //console.log("_CanDrawAmount",total);
         return total;
     }
 
@@ -271,20 +274,21 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
 
 
     function _CanMintAmount(address account) public view returns (uint256 total){
-        console.log("curRoundIndex:", curRoundIndex);
-        // uint32 dayTime = 24 * 3600;
-        // uint32 dayTime = 60;
+        //console.log("curRoundIndex:", curRoundIndex);
         uint256 mintAmount;
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint256 total = RoundsInfo[i][account].total;
             uint256 balance = RoundsInfo[i][account].balance;
             uint256 nTimes = RoundsInfo[i][account].nTimes;
+
             if (total == 0 || balance == 0 || nTimes == 10) {
+                //console.log("_CanMintAmount:", total, balance, nTimes);
                 continue;
             }
             mintAmount = mintAmount.add(balance);
+           // console.log("_CanMintAmount:", balance, mintAmount);
         }
-
+        return mintAmount;
     }
 
     function RoundMint(uint256 amount) public {
