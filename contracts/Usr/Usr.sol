@@ -220,7 +220,7 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
     function tar_usd_24H_price() public view returns (uint256) {
         //1e6 precision
         uint256 price_tar_usr_24H = uint256(tarUsr24HOracle.consult(tar_address, PRICE_PRECISION));
-        uint256 price_usr_usd_24H = uint256(usrUsd24HOracle.consult(address(this), PRICE_PRECISION));
+        uint256 price_usr_usd_24H = uint256(usrUsd24HOracle.consult(address(this), 1e18));
         return price_tar_usr_24H.mul(price_usr_usd_24H).div(PRICE_PRECISION);
     }
 
