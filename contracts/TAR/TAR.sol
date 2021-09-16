@@ -114,8 +114,10 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
     }
 
     function AddWhitelist(address[] memory whiteList, uint256[]  memory balances, bool isFinished) public onlyByOwnerOrGovernance {
+        // 24 * 60 * 60
+        uint32 dayTime = 60;
         if (curRoundIndex >= 1) {
-            require(lastAddWhiteListTime + 30 * 24 * 60 * 60 <= currentBlockTimestamp(), "interval of each round should be more than 1 month");
+            require(lastAddWhiteListTime + 30 * dayTime <= currentBlockTimestamp(), "interval of each round should be more than 1 month");
         }
         for (uint256 i = 0; i < whiteList.length; i++) {
             RoundsInfo[curRoundIndex][whiteList[i]] = RoundInfo(balances[i], balances[i], 0);
