@@ -115,7 +115,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
 
     function AddWhitelist(address[] memory whiteList, uint256[]  memory balances, bool isFinished) public onlyByOwnerOrGovernance {
         // 24 * 60 * 60
-        uint32 dayTime = 60;
+        uint32 dayTime = 10;
         if (curRoundIndex >= 1) {
             require(lastAddWhiteListTime + 30 * dayTime <= currentBlockTimestamp(), "interval of each round should be more than 1 month");
         }
@@ -192,7 +192,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
 
     function CanDrawAmount(address account) public view returns (uint256 total){
         uint256 total;
-        uint32 dayTime = 60;
+        uint32 dayTime = 10;
         uint32 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
@@ -223,7 +223,7 @@ contract Tollar is ERC20Custom, AccessControl, Owned {
 
     function _CanDrawAmount(address account) internal returns (uint256 total){
         uint256 total;
-        uint32 dayTime = 60;
+        uint32 dayTime = 10;
         uint32 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;

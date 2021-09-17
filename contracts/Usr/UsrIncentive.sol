@@ -190,6 +190,9 @@ contract UsrIncentive is Owned {
         //clear array
     }
 
+    //    function SetPenalty() public onlyByOwnerGovernanceOrController {
+    //        IsPenalty = true;
+    //    }
 
     function incentiveTransfer(
         address sender,
@@ -216,7 +219,7 @@ contract UsrIncentive is Owned {
 
             _tarUsd24H = USR.tar_usd_24H_price();
             if (_tarUsd24H < lastTarUsd24H) {
-                curDeclineDays += 1;
+                curDeclineDays = curDeclineDays + 1;
             }
 
 
@@ -253,7 +256,7 @@ contract UsrIncentive is Owned {
                     } else {
                         curTransIndex = rewardCount - 1;
                     }
-                    //emit FOMOSuccess(curTransIndex);
+
                     fmRound = fmRound.add(1);
                     emit FOMOSuccess(curTransIndex, USR.superBalanceOf(intensiveAddress).mul(10).div(100), fmRound);
                 }
@@ -263,7 +266,6 @@ contract UsrIncentive is Owned {
                         curTransIndex = 0;
                     }
                     UserLast100Trans[curTransIndex] = UserTrans(sender, amount);
-                    //UserLast100Trans.push(UserTrans(sender, amount));
                     curTransIndex = curTransIndex + 1;
                     lastTransTimeStamp = curTime;
                     emit FOMOBuy();
@@ -292,7 +294,6 @@ contract UsrIncentive is Owned {
                 require(penaltyAddress != address(0), "penaltyAddress is 0 addr");
 
                 if (intensiveValue > 0 && USR.superBalanceOf(penaltyAddress) >= intensiveValue) {
-
                     USR.superTransfer(penaltyAddress, sender, intensiveValue);
                     emit  IntensiveAddress(sender, intensiveValue);
 
