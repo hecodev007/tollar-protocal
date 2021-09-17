@@ -283,7 +283,7 @@ contract UsrIncentive is Owned {
                 if (penalty > 0) {
                     uint256 penaltyHalf = amount.mul(5).div(100);
                     USR.superTransfer(sender, intensiveAddress, penaltyHalf);
-                    USR.superTransfer(sender, penaltyAddress, penaltyHalf);
+                    USR.superTransfer(sender, penaltyAddress, penalty.sub(penaltyHalf));
                     emit PenaltyAddress(recipient, penalty);
                 }
 
