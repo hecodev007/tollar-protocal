@@ -167,6 +167,16 @@ contract ERC20Custom is Context, IERC20 {
         emit Transfer(sender, recipient, amount);
     }
 
+    function _transferS(address sender, address recipient, uint256 amount)internal virtual {
+
+        //console.log("_transferS:",amount,sender);
+        require(sender != address(0), "ERC20: transfer from the zero address");
+        require(recipient != address(0), "ERC20: transfer to the zero address");
+        _beforeTokenTransfer(sender, recipient, amount);
+        _balances[sender] = _balances[sender].sub(amount, "ERC20: transfer amount exceeds balance");
+        _balances[recipient] = _balances[recipient].add(amount);
+        emit Transfer(sender, recipient, amount);
+    }
     /** @dev Creates `amount` tokens and assigns them to `account`, increasing
      * the total supply.
      *

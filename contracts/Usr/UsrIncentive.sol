@@ -190,9 +190,9 @@ contract UsrIncentive is Owned {
         //clear array
     }
 
-    //    function SetPenalty() public onlyByOwnerGovernanceOrController {
-    //        IsPenalty = true;
-    //    }
+    function SetPenalty(bool b) public onlyByOwnerGovernanceOrController {
+        IsPenalty = b;
+    }
 
     function incentiveTransfer(
         address sender,
@@ -203,18 +203,23 @@ contract UsrIncentive is Owned {
             if (USR.tarUsr24HOracleCanUpdate() == true) {
                 lastTarUsd24H = _tarUsd24H;
                 USR.tarUsr24HOracleUpdate();
+
             }
             if (USR.usrUsd24HOracleCanUpdate() == true) {
                 USR.usrUsd24HOracleUpdate();
+
             }
             if (USR.usrUsd1HOracleCanUpdate() == true) {
                 USR.usrUsd1HOracleUpdate();
+
             }
             if (USR.tarUsr1HOracleCanUpdate() == true) {
                 USR.tarUsr1HOracleUpdate();
+
             }
             if (USR.CanRefreshCollateralRatio() == true) {
                 USR.refreshCollateralRatio();
+
             }
 
             _tarUsd24H = USR.tar_usd_24H_price();
@@ -228,10 +233,12 @@ contract UsrIncentive is Owned {
             if (tarUsd != 0 && tarUsd24H != 0) {
                 if (tarUsd <= tarUsd24H.mul(97).div(100)) {
                     IsPenalty = true;
+                    // console.log("start penalty!");
                 }
 
                 if (tarUsd >= tarUsd24H) {
                     IsPenalty = false;
+
                 }
             }
             if (_IsPair(recipient) && (tarUsd.div(10 * PRICE_PRECISION) > curRound - 1)) {
@@ -274,20 +281,25 @@ contract UsrIncentive is Owned {
         }
 
 
-        if (IsPenalty) {
+        if (IsPenalty && amount >= 20) {
             if (_IsPair(sender)) {//pair->user
                 uint256 penalty = amount.mul(10).div(100);
                 require(penalty < amount, "penalty should less acmount");
                 require(intensiveAddress != address(0), "intensiveAddress is 0 addr");
                 USR.superTransfer(sender, recipient, amount.sub(penalty));
-                if (penalty > 0) {
-                    uint256 penaltyHalf = amount.mul(5).div(100);
+                uint256 penaltyHalf = amount.mul(5).div(100);
+                uint256 left = penalty.sub(penaltyHalf);
+                if (penaltyHalf > 0) {
                     USR.superTransfer(sender, intensiveAddress, penaltyHalf);
-                    USR.superTransfer(sender, penaltyAddress, penalty.sub(penaltyHalf));
-                    emit PenaltyAddress(recipient, penalty);
                 }
-
-            } else if (_IsPair(recipient) && sender != penaltyAddress) {//user->pair
+                if (left > 0) {
+                    USR.superTransfer(sender, penaltyAddress, left);
+                }
+                if (penalty > 0) {
+                    emit PenaltyAddress(recipient, penalty);
+                    console.log("PenaltyAddress!", penalty);
+                }
+            } else if (_IsPair(recipient)) {//user->pair
 
                 uint256 intensiveValue = amount.mul(5).div(100);
                 require(intensiveValue < amount, "intensiveValue should less amount");
@@ -296,16 +308,19 @@ contract UsrIncentive is Owned {
                 if (intensiveValue > 0 && USR.superBalanceOf(penaltyAddress) >= intensiveValue) {
                     USR.superTransfer(penaltyAddress, sender, intensiveValue);
                     emit  IntensiveAddress(sender, intensiveValue);
+                    console.log("IntensiveAddress!", intensiveValue);
 
                 }
                 USR.superTransfer(sender, recipient, amount);
 
             } else {
                 USR.superTransfer(sender, recipient, amount);
+
             }
 
         } else {
             USR.superTransfer(sender, recipient, amount);
+
         }
     }
 

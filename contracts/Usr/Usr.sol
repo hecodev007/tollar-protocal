@@ -138,13 +138,15 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
         uint256 amount
     ) internal override {
         usrIncentive.incentiveTransfer(sender, recipient, amount);
+
     }
 
     function superTransfer(
         address sender,
         address recipient,
         uint256 amount) public onlyIncentive {
-        super._transfer(sender, recipient, amount);
+      //  if (sender==incentive)
+        super._transferS(sender, recipient, amount);
     }
 
     function superBalanceOf(

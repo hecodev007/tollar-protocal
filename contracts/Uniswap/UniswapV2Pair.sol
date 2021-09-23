@@ -9,7 +9,7 @@ import '../Math/UQ112x112.sol';
 import '../ERC20/IERC20.sol';
 import './Interfaces/IUniswapV2Factory.sol';
 import './Interfaces/IUniswapV2Callee.sol';
-
+import "hardhat/console.sol";
 contract UniswapV2Pair is IUniswapV2Pair {
     using SafeMath for uint;
     using UQ112x112 for uint224;
@@ -29,7 +29,7 @@ contract UniswapV2Pair is IUniswapV2Pair {
     mapping(address => uint) public override nonces;
 
 
-    
+
 
     address public override factory;
     address public override token0;
@@ -57,6 +57,9 @@ contract UniswapV2Pair is IUniswapV2Pair {
         _blockTimestampLast = blockTimestampLast;
     }
 
+    function SafeTransfer(address token, address to, uint value)public{
+        _safeTransfer(token,to,value);
+    }
     function _safeTransfer(address token, address to, uint value) private {
         (bool success, bytes memory data) = token.call(abi.encodeWithSelector(SELECTOR, to, value));
         require(success && (data.length == 0 || abi.decode(data, (bool))), 'UniswapV2: TRANSFER_FAILED');
@@ -124,6 +127,7 @@ contract UniswapV2Pair is IUniswapV2Pair {
 
     // this low-level function should be called from a contract which performs important safety checks
     function mint(address to) external override lock returns (uint liquidity) {
+
         (uint112 _reserve0, uint112 _reserve1,) = getReserves(); // gas savings
         uint balance0 = IERC20(token0).balanceOf(address(this));
         uint balance1 = IERC20(token1).balanceOf(address(this));
@@ -143,6 +147,7 @@ contract UniswapV2Pair is IUniswapV2Pair {
         _mint(to, liquidity);
 
         _update(balance0, balance1, _reserve0, _reserve1);
+
         if (feeOn) kLast = uint(reserve0).mul(reserve1); // reserve0 and reserve1 are up-to-date
         emit Mint(msg.sender, amount0, amount1);
     }
