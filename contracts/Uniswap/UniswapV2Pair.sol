@@ -56,10 +56,10 @@ contract UniswapV2Pair is IUniswapV2Pair {
         _reserve1 = reserve1;
         _blockTimestampLast = blockTimestampLast;
     }
-
-    function SafeTransfer(address token, address to, uint value)public{
-        _safeTransfer(token,to,value);
-    }
+//
+//    function SafeTransfer(address token, address to, uint value)public{
+//        _safeTransfer(token,to,value);
+//    }
     function _safeTransfer(address token, address to, uint value) private {
         (bool success, bytes memory data) = token.call(abi.encodeWithSelector(SELECTOR, to, value));
         require(success && (data.length == 0 || abi.decode(data, (bool))), 'UniswapV2: TRANSFER_FAILED');
