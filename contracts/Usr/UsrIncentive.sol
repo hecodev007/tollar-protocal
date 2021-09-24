@@ -198,12 +198,10 @@ contract UsrIncentive is Owned {
         address sender,
         address recipient,
         uint256 amount) public onlyUsr {
-
         if (USR.IsOracleReady()) {
             if (USR.tarUsr24HOracleCanUpdate() == true) {
                 lastTarUsd24H = _tarUsd24H;
                 USR.tarUsr24HOracleUpdate();
-
             }
             if (USR.usrUsd24HOracleCanUpdate() == true) {
                 USR.usrUsd24HOracleUpdate();
@@ -211,15 +209,12 @@ contract UsrIncentive is Owned {
             }
             if (USR.usrUsd1HOracleCanUpdate() == true) {
                 USR.usrUsd1HOracleUpdate();
-
             }
             if (USR.tarUsr1HOracleCanUpdate() == true) {
                 USR.tarUsr1HOracleUpdate();
-
             }
             if (USR.CanRefreshCollateralRatio() == true) {
                 USR.refreshCollateralRatio();
-
             }
 
             _tarUsd24H = USR.tar_usd_24H_price();
@@ -241,15 +236,20 @@ contract UsrIncentive is Owned {
 
                 }
             }
+
             if (_IsPair(recipient) && (tarUsd.div(10 * PRICE_PRECISION) > curRound - 1)) {
                 curRound = curRound + 1;
                 emit StartMintRound(curRound - 1);
             }
 
             uint256 balTar = TAR.balanceOf(intensiveAddress);
-            if (curDeclineDays >= declineDays && SuccessFOMO == false && USR.superBalanceOf(intensiveAddress).add(balTar.mul(tarUsd.div(10 ** PRICE_PRECISION))) >= fomoThreshold) {//begin FOMO
+
+            uint256 value = USR.superBalanceOf(intensiveAddress).add(balTar.mul(tarUsd.div(PRICE_PRECISION)));
+
+            if (curDeclineDays >= declineDays && SuccessFOMO == false && value >= fomoThreshold) {//begin FOMO
                 curDeclineDays = 0;
                 isStartFOMO = true;
+
                 emit StartFOMO();
             }
 
@@ -278,6 +278,7 @@ contract UsrIncentive is Owned {
                     emit FOMOBuy();
                 }
             }
+
         }
 
 
@@ -322,6 +323,7 @@ contract UsrIncentive is Owned {
             USR.superTransfer(sender, recipient, amount);
 
         }
+
     }
 
 

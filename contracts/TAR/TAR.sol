@@ -4,7 +4,7 @@ pragma solidity >=0.6.11;
 
 import "hardhat/console.sol";
 import "../Common/Context.sol";
-import "../ERC20/ERC20Custom.sol";
+import "../ERC20/ERC20CustomV1.sol";
 import "../ERC20/IERC20.sol";
 import "../Usr/Usr.sol";
 import "../Staking/Owned.sol";
@@ -12,7 +12,7 @@ import "../Math/SafeMath.sol";
 import "../Governance/AccessControl.sol";
 import '../Uniswap/TransferHelper.sol';
 
-contract Tollar is ERC20Custom, AccessControl, Owned {
+contract Tollar is ERC20CustomV1, AccessControl, Owned {
     using SafeMath for uint256;
 
     /* ========== STATE VARIABLES ========== */
