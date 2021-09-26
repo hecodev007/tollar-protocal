@@ -32,8 +32,8 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
     struct BalanceInfo {
         uint256 balance;
         uint256 total;
-        uint32 startTime;
-        uint32 lockTime;
+        uint256 startTime;
+        uint256 lockTime;
     }
 
     struct RoundInfo {
@@ -192,8 +192,8 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
 
     function CanDrawAmount(address account) public view returns (uint256 total){
         uint256 total;
-        uint32 dayTime = 10;
-        uint32 curTime = currentBlockTimestamp();
+        uint256 dayTime = 10;
+        uint256 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
             if (nTimes == 0) {
@@ -204,12 +204,12 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
                 if (bl.startTime == 0 || curTime < bl.startTime + dayTime || bl.balance == 0) {
                     continue;
                 }
-                uint32 endTime = bl.startTime + (i + 12) * 30 * dayTime;
+                uint256 endTime = bl.startTime + (i + 12) * 30 * dayTime;
                 if (curTime > endTime) {
                     curTime = endTime;
                 }
-                uint32 elapsedDay = (curTime - bl.startTime) / dayTime;
-                uint256 drawAmount = bl.total.mul(uint256(elapsedDay)).div(uint256((i + 12) * 30));
+                uint256 elapsedDay = (curTime - bl.startTime) / dayTime;
+                uint256 drawAmount = bl.total.mul(elapsedDay).div(uint256((i + 12) * 30));
                 uint256 drawedAmount = bl.total.sub(bl.balance);
                 if (drawAmount > drawedAmount) {
                     total = total.add(drawAmount.sub(drawedAmount));
@@ -221,10 +221,10 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
         return total;
     }
 
-    function _CanDrawAmount(address account) internal returns (uint256 total){
+    function UnlockAmount(address account) internal returns (uint256 total){
         uint256 total;
-        uint32 dayTime = 10;
-        uint32 curTime = currentBlockTimestamp();
+        uint256 dayTime = 10;
+        uint256 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
             console.log("nTimes:",nTimes);
@@ -236,12 +236,39 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
                 if (bl.startTime == 0 || curTime < bl.startTime + dayTime || bl.balance == 0) {
                     continue;
                 }
-                uint32 endTime = bl.startTime + (i + 12) * 30 * dayTime;
+                uint256 endTime = bl.startTime + (i + 12) * 30 * dayTime;
                 if (curTime > endTime) {
                     curTime = endTime;
                 }
                 uint32 elapsedDay = (curTime - bl.startTime) / dayTime;
-                uint256 drawAmount = bl.total.mul(uint256(elapsedDay)).div(uint256((i + 12) * 30));
+                uint256 drawAmount = bl.total.mul(elapsedDay).div(uint256((i + 12) * 30));
+                total = total.add(drawAmount);
+            }
+        }
+        return total;
+    }
+
+    function _CanDrawAmount(address account) internal returns (uint256 total){
+        uint256 total;
+        uint256 dayTime = 10;
+        uint256 curTime = currentBlockTimestamp();
+        for (uint32 i = 0; i < curRoundIndex; i++) {
+            uint32 nTimes = RoundsInfo[i][account].nTimes;
+            console.log("nTimes:",nTimes);
+            if (nTimes == 0) {
+                continue;
+            }
+            for (uint32 j = 1; j <= nTimes; j++) {
+                BalanceInfo memory bl = RoundMintDetail[i][j][account];
+                if (bl.startTime == 0 || curTime < bl.startTime + dayTime || bl.balance == 0) {
+                    continue;
+                }
+                uint256 endTime = bl.startTime + (i + 12) * 30 * dayTime;
+                if (curTime > endTime) {
+                    curTime = endTime;
+                }
+                uint32 elapsedDay = (curTime - bl.startTime) / dayTime;
+                uint256 drawAmount = bl.total.mul(elapsedDay).div(uint256((i + 12) * 30));
                 uint256 drawedAmount = bl.total.sub(bl.balance);
                 //console.log("_CanDrawAmount:",elapsedDay,drawAmount,drawedAmount);
                 if (drawAmount > drawedAmount) {
