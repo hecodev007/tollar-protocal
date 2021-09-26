@@ -109,8 +109,8 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
     }
 
     /* ========== RESTRICTED FUNCTIONS ========== */
-    function currentBlockTimestamp() internal view returns (uint32) {
-        return uint32(block.timestamp % 2 ** 32);
+    function currentBlockTimestamp() internal view returns (uint256) {
+        return block.timestamp;
     }
 
     function AddWhitelist(address[] memory whiteList, uint256[]  memory balances, bool isFinished) public onlyByOwnerOrGovernance {
