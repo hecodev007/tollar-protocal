@@ -47,8 +47,8 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
     mapping(uint32 => mapping(address => RoundInfo)) public RoundsInfo;//round->addr->RoundInfo
     mapping(uint32 => mapping(uint32 => mapping(address => BalanceInfo))) public RoundMintDetail; //round->n times->addr->info
     uint32  public curRoundIndex = 0;
-    uint32 private addWhiteListTime = 0;
-    uint32 private lastAddWhiteListTime = 0;
+    uint256 private addWhiteListTime = 0;
+    uint256 private lastAddWhiteListTime = 0;
     // A checkpoint for marking number of votes from a given block
     struct Checkpoint {
         uint32 fromBlock;
@@ -240,7 +240,7 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
                 if (curTime > endTime) {
                     curTime = endTime;
                 }
-                uint32 elapsedDay = (curTime - bl.startTime) / dayTime;
+                uint256 elapsedDay = (curTime - bl.startTime) / dayTime;
                 uint256 drawAmount = bl.total.mul(elapsedDay).div(uint256((i + 12) * 30));
                 total = total.add(drawAmount);
             }
@@ -267,7 +267,7 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
                 if (curTime > endTime) {
                     curTime = endTime;
                 }
-                uint32 elapsedDay = (curTime - bl.startTime) / dayTime;
+                uint256 elapsedDay = (curTime - bl.startTime) / dayTime;
                 uint256 drawAmount = bl.total.mul(elapsedDay).div(uint256((i + 12) * 30));
                 uint256 drawedAmount = bl.total.sub(bl.balance);
                 //console.log("_CanDrawAmount:",elapsedDay,drawAmount,drawedAmount);
@@ -336,7 +336,7 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
         TransferHelper.safeTransferFrom(USRStableCoinAddr, msg.sender, address(this), realAmount);
 
         uint256 tmpAmount = realAmount;
-        uint32 curTime = currentBlockTimestamp();
+        uint256 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint256 total = RoundsInfo[i][msg.sender].total;
             uint256 balance = RoundsInfo[i][msg.sender].balance;
