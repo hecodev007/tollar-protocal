@@ -636,7 +636,7 @@ contract UsrIncentive is Owned {
             amounts[i] = UserLast100Trans[i].amount;
 
         }
-
+        return (accounts,amounts);
     }
 
     function intensiveForGovernance(address account, uint256 amount) external onlyByOwnerGovernanceOrController {
