@@ -221,13 +221,13 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
         return total;
     }
 
-    function UnlockAmount(address account) internal returns (uint256 total){
+    function UnlockAmount(address account) public view returns (uint256 total){
         uint256 total;
         uint256 dayTime = 10;
         uint256 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
-            console.log("nTimes:",nTimes);
+           // console.log("nTimes:",nTimes);
             if (nTimes == 0) {
                 continue;
             }
