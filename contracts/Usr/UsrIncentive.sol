@@ -26,7 +26,7 @@ contract UsrIncentive is Owned {
     /* ========== STATE VARIABLES ========== */
 
     uint public declineDays = 7;   //
-    uint  private curDeclineDays = 0;
+    uint  public curDeclineDays = 0;
     address public creator_address;
     address public timelock_address; // Governance timelock address
 
@@ -34,8 +34,8 @@ contract UsrIncentive is Owned {
     address private pair_address;
 
     UserTrans[100]  public UserLast100Trans;
-    uint public curTransIndex = 0;
-    uint32 private lastTransTimeStamp = 0;
+    uint256 public curTransIndex = 0;
+    uint256 private lastTransTimeStamp = 0;
     uint public rewardCount = 100;
     bool public isStartFOMO = false;
     bool private SuccessFOMO = false;
@@ -43,7 +43,7 @@ contract UsrIncentive is Owned {
     uint256 private transInterval = 10 * 60;//10 mins
     // Constants for various precisions
     uint256 private constant PRICE_PRECISION = 1e6;
-    uint256 public fomoThreshold = 300000e18;
+    uint256 public fomoThreshold = 100e18;
     bool public IsPenalty = false; //
     mapping(address => bool) public intensive;//swap pair include usr
     address public intensiveAddress;
@@ -58,7 +58,7 @@ contract UsrIncentive is Owned {
     //round->addr->value
     //mapping(uint256 => mapping(address => UserReward)) public rewards;
     mapping(uint256 => UserReward[]) public rewards;
-    mapping(address => uint256) _rank;
+    mapping(address => mapping(uint256 => uint256)) _rank;
     modifier onlyUsr() {
         require(UsrAddress == msg.sender, "only Usr");
         _;
@@ -93,8 +93,8 @@ contract UsrIncentive is Owned {
 
     }
 
-    function currentBlockTimestamp() internal view returns (uint32) {
-        return uint32(block.timestamp % 2 ** 32);
+    function currentBlockTimestamp() internal view returns (uint256) {
+        return block.timestamp;
     }
 
     function currentBlockTimestampForTest() public view returns (uint32) {
@@ -131,6 +131,18 @@ contract UsrIncentive is Owned {
         PAIR.swap(amount0Out, amount1Out, to, new bytes(0));
         return amountOut;
     }
+
+    function getAmountOut(uint256 amount) internal returns (uint256){
+        (uint256 reserves0, uint256 reserves1,) = PAIR.getReserves();
+        (uint256 reserveUsr, uint256 reserveTar) = PAIR.token0() == address(UsrAddress) ? (reserves0, reserves1) : (reserves1, reserves0);
+        uint256 amountOut = UniswapV2Library.getAmountOut(
+            amount,
+            reserveUsr,
+            reserveTar
+        );
+        return amountOut;
+    }
+
     //only for test
     function buyTarForTest(uint256 amount, address to) public onlyByOwnerGovernanceOrController returns (uint256) {
         require(USR.superBalanceOf(msg.sender) > amount, "balance not enough");
@@ -225,6 +237,7 @@ contract UsrIncentive is Owned {
 
             uint256 tarUsd = USR.tar_usd_price();
             uint256 tarUsd24H = USR.tar_usd_24H_price();
+            //console.log(tarUsd,tarUsd24H);
             if (tarUsd != 0 && tarUsd24H != 0) {
                 if (tarUsd <= tarUsd24H.mul(97).div(100)) {
                     IsPenalty = true;
@@ -244,17 +257,16 @@ contract UsrIncentive is Owned {
 
             uint256 balTar = TAR.balanceOf(intensiveAddress);
 
-            uint256 value = USR.superBalanceOf(intensiveAddress).add(balTar.mul(tarUsd.div(PRICE_PRECISION)));
-
+            uint256 value = USR.superBalanceOf(intensiveAddress).add(balTar.mul(tarUsd).div(PRICE_PRECISION));
             if (curDeclineDays >= declineDays && SuccessFOMO == false && value >= fomoThreshold) {//begin FOMO
                 curDeclineDays = 0;
                 isStartFOMO = true;
-
+                console.log("StartFOMO");
                 emit StartFOMO();
             }
 
             if (isStartFOMO) {
-                uint32 curTime = currentBlockTimestamp();
+                uint256 curTime = currentBlockTimestamp();
                 if (lastTransTimeStamp > 0 && curTransIndex >= 1 && curTime - lastTransTimeStamp > transInterval) {
                     SuccessFOMO = true;
                     isStartFOMO = false;
@@ -265,6 +277,7 @@ contract UsrIncentive is Owned {
                     }
 
                     fmRound = fmRound.add(1);
+                    console.log("FOMOSuccess");
                     emit FOMOSuccess(curTransIndex, USR.superBalanceOf(intensiveAddress).mul(10).div(100), fmRound);
                 }
 
@@ -298,7 +311,6 @@ contract UsrIncentive is Owned {
                 }
                 if (penalty > 0) {
                     emit PenaltyAddress(recipient, penalty);
-                    console.log("PenaltyAddress!", penalty);
                 }
             } else if (_IsPair(recipient)) {//user->pair
 
@@ -309,7 +321,6 @@ contract UsrIncentive is Owned {
                 if (intensiveValue > 0 && USR.superBalanceOf(penaltyAddress) >= intensiveValue) {
                     USR.superTransfer(penaltyAddress, sender, intensiveValue);
                     emit  IntensiveAddress(sender, intensiveValue);
-                    console.log("IntensiveAddress!", intensiveValue);
 
                 }
                 USR.superTransfer(sender, recipient, amount);
@@ -380,11 +391,12 @@ contract UsrIncentive is Owned {
 
     function rank() internal returns (uint256){
         uint256 index = curTransIndex;
+        console.log("curTransIndex:", curTransIndex);
         uint256 _reward;
         if (UserLast100Trans[index].account == address(0)) {
             return _reward;
         }
-        _rank[UserLast100Trans[index].account] = 1;
+        _rank[UserLast100Trans[index].account][index] = 1;
         _reward = _reward.add(UserLast100Trans[index].amount.mul(100));
         if (index == 0) {
             index = 100;
@@ -395,7 +407,7 @@ contract UsrIncentive is Owned {
                 if (UserLast100Trans[i].account == address(0)) {
                     break;
                 }
-                _rank[UserLast100Trans[i].account] = 2;
+                _rank[UserLast100Trans[i].account][i] = 2;
                 _reward = _reward.add(UserLast100Trans[i].amount.mul(10));
                 j++;
             } else {
@@ -404,7 +416,7 @@ contract UsrIncentive is Owned {
                 }
 
                 _reward = _reward.add(UserLast100Trans[index].amount.mul(10).div(100));
-                _rank[UserLast100Trans[i].account] = 3;
+                _rank[UserLast100Trans[i].account][i] = 3;
             }
 
             if (i == 0) {
@@ -423,20 +435,20 @@ contract UsrIncentive is Owned {
             if (UserLast100Trans[i].account == address(0)) {
                 break;
             }
-            if (_rank[UserLast100Trans[i].account] == 1) {
-                uint256 reward = UserLast100Trans[i].amount.mul(100).mul(realReward).div(calReward);
+            if (_rank[UserLast100Trans[i].account][i] == 1) {
+                uint256 reward = getAmountOut(UserLast100Trans[i].amount.mul(100)).mul(realReward).div(calReward);
                 if (reward > 0) {
                     AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
                 rewards[fmRound].push(UserReward(UserLast100Trans[i].account, reward, UserLast100Trans[i].amount, 1));
-            } else if (_rank[UserLast100Trans[i].account] == 2) {
-                uint256 reward = UserLast100Trans[i].amount.mul(10).mul(realReward).div(calReward);
+            } else if (_rank[UserLast100Trans[i].account][i] == 2) {
+                uint256 reward = getAmountOut(UserLast100Trans[i].amount.mul(10)).mul(realReward).div(calReward);
                 if (reward > 0) {
                     AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
                 rewards[fmRound].push(UserReward(UserLast100Trans[i].account, reward, UserLast100Trans[i].amount, 2));
-            } else if (_rank[UserLast100Trans[i].account] == 3) {
-                uint256 reward = UserLast100Trans[i].amount.mul(10).div(100).mul(realReward).div(calReward);
+            } else if (_rank[UserLast100Trans[i].account][i] == 3) {
+                uint256 reward = getAmountOut(UserLast100Trans[i].amount.mul(10).div(100)).mul(realReward).div(calReward);
                 if (reward > 0) {
                     AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
@@ -450,18 +462,21 @@ contract UsrIncentive is Owned {
     //this is new one
     function dispatchFMReward() public onlyByOwnerGovernanceOrController {
         require(SuccessFOMO == true, "need successFoMo");
+        // reward amount of usr
         uint256 _reward = rank();
         uint256 balUsr = USR.balanceOf(intensiveAddress).mul(10).div(100);
         require(balUsr > 0, "usr bal bigger than 0");
         uint256 tarBal = TAR.balanceOf(intensiveAddress).mul(10).div(100);
         //dispatch logic
         uint256 bal = buyTar(balUsr, intensiveAddress);
-        uint256 calTar = bal.mul(_reward).div(balUsr);
+        //usr to tar value
+        //uint256 calTar = bal.mul(_reward).div(balUsr);
+        uint256 calTar = getAmountOut(_reward);
         bal = bal.add(tarBal);
         if (calTar > bal) {//percent
-            dispatch(_reward, bal);
+            dispatch(calTar, bal);
         } else {//100%
-            dispatch(_reward, calTar);
+            dispatch(calTar, calTar);
         }
         curTransIndex = 0;
         SuccessFOMO = false;
@@ -625,10 +640,10 @@ contract UsrIncentive is Owned {
         return intensiveAddress;
     }
 
-    function getRewardList() public view returns (address[] memory accounts, uint256[] memory amounts){
-        accounts = new address[](UserLast100Trans.length);
-        amounts = new uint256[](UserLast100Trans.length);
-        for (uint i = 0; i < UserLast100Trans.length; i++) {
+    function getRewardList() public view returns (address[] memory, uint256[] memory){
+        address[] memory accounts = new address[](UserLast100Trans.length);
+        uint256[] memory amounts = new uint256[](UserLast100Trans.length);
+        for (uint256 i = 0; i < UserLast100Trans.length; i++) {
             if (UserLast100Trans[i].account == address(0)) {
                 break;
             }
@@ -636,7 +651,7 @@ contract UsrIncentive is Owned {
             amounts[i] = UserLast100Trans[i].amount;
 
         }
-        return (accounts,amounts);
+        return (accounts, amounts);
     }
 
     function intensiveForGovernance(address account, uint256 amount) external onlyByOwnerGovernanceOrController {
@@ -648,7 +663,7 @@ contract UsrIncentive is Owned {
     // event FOMOSuccess(uint curTransIndex);
     event IntensiveAddress(address addr, uint256 amount);
     event PenaltyAddress(address addr, uint256 amount);
-    event FOMOSuccess(uint curTransIndex, uint256 bal, uint256 round);
+    event FOMOSuccess(uint256 curTransIndex, uint256 bal, uint256 round);
     event StartMintRound(uint256 round);
     event StartFOMO();
     event FOMOBuy();
