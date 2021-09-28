@@ -391,7 +391,7 @@ contract UsrIncentive is Owned {
 
     function rank() internal returns (uint256){
         uint256 index = curTransIndex;
-        console.log("curTransIndex:", curTransIndex);
+       // console.log("curTransIndex:", curTransIndex);
         uint256 _reward;
         if (UserLast100Trans[index].account == address(0)) {
             return _reward;
@@ -405,7 +405,7 @@ contract UsrIncentive is Owned {
         for (uint256 i = index - 1;;) {
             if (j < 9) {
                 if (UserLast100Trans[i].account == address(0)) {
-                    break;
+                   break;
                 }
                 _rank[UserLast100Trans[i].account][i] = 2;
                 _reward = _reward.add(UserLast100Trans[i].amount.mul(10));
@@ -422,6 +422,7 @@ contract UsrIncentive is Owned {
             if (i == 0) {
                 i = 100;
             }
+
             i--;
         }
         return _reward;
@@ -436,20 +437,23 @@ contract UsrIncentive is Owned {
                 break;
             }
             if (_rank[UserLast100Trans[i].account][i] == 1) {
-                uint256 reward = getAmountOut(UserLast100Trans[i].amount.mul(100)).mul(realReward).div(calReward);
+                uint256 reward = UserLast100Trans[i].amount.mul(100).mul(realReward).div(calReward);
                 if (reward > 0) {
+                   // console.log("1:",i, reward);
                     AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
                 rewards[fmRound].push(UserReward(UserLast100Trans[i].account, reward, UserLast100Trans[i].amount, 1));
             } else if (_rank[UserLast100Trans[i].account][i] == 2) {
-                uint256 reward = getAmountOut(UserLast100Trans[i].amount.mul(10)).mul(realReward).div(calReward);
+                uint256 reward = UserLast100Trans[i].amount.mul(10).mul(realReward).div(calReward);
                 if (reward > 0) {
+                    //console.log("2:",i, reward);
                     AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
                 rewards[fmRound].push(UserReward(UserLast100Trans[i].account, reward, UserLast100Trans[i].amount, 2));
             } else if (_rank[UserLast100Trans[i].account][i] == 3) {
-                uint256 reward = getAmountOut(UserLast100Trans[i].amount.mul(10).div(100)).mul(realReward).div(calReward);
+                uint256 reward = UserLast100Trans[i].amount.mul(10).mul(realReward).div(calReward).div(100);
                 if (reward > 0) {
+                   // console.log("3:", reward);
                     AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
                 rewards[fmRound].push(UserReward(UserLast100Trans[i].account, reward, UserLast100Trans[i].amount, 3));
@@ -474,9 +478,9 @@ contract UsrIncentive is Owned {
         uint256 calTar = getAmountOut(_reward);
         bal = bal.add(tarBal);
         if (calTar > bal) {//percent
-            dispatch(calTar, bal);
+            dispatch(_reward, bal);
         } else {//100%
-            dispatch(calTar, calTar);
+            dispatch(_reward, calTar);
         }
         curTransIndex = 0;
         SuccessFOMO = false;

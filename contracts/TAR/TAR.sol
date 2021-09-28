@@ -109,7 +109,7 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
     }
 
     /* ========== RESTRICTED FUNCTIONS ========== */
-    function currentBlockTimestamp() internal view returns (uint256) {
+    function currentBlockTimestamp() public view returns (uint256) {
         return block.timestamp;
     }
 
