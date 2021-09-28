@@ -393,7 +393,48 @@ contract UsrIncentive is Owned {
     //        rewards[fmRound].push(UserReward(info.account, reward, info.amount, 3));
     //    }
 
-    function rank() public view returns (uint256){
+
+    function getReward() public view returns (uint256){
+        uint256 index = curTransIndex;
+        // console.log("curTransIndex:", curTransIndex);
+        uint256 _reward;
+        if (UserLast100Trans[index].account == address(0)) {
+            return _reward;
+        }
+        //_rank[UserLast100Trans[index].account][index] = 1;
+        _reward = _reward.add(UserLast100Trans[index].amount.mul(100));
+        if (index == 0) {
+            index = 100;
+        }
+        uint256 j = 0;
+        for (uint256 i = index - 1;;) {
+            if (j < 9) {
+                if (UserLast100Trans[i].account == address(0)) {
+                    break;
+                }
+                //_rank[UserLast100Trans[i].account][i] = 2;
+                _reward = _reward.add(UserLast100Trans[i].amount.mul(10));
+                j++;
+            } else {
+                if (i == curTransIndex || UserLast100Trans[i].account == address(0)) {
+                    break;
+                }
+
+                _reward = _reward.add(UserLast100Trans[index].amount.mul(10).div(100));
+               // _rank[UserLast100Trans[i].account][i] = 3;
+            }
+
+            if (i == 0) {
+                i = 100;
+            }
+
+            i--;
+        }
+        return _reward;
+    }
+
+
+    function rank() internal returns (uint256){
         uint256 index = curTransIndex;
         // console.log("curTransIndex:", curTransIndex);
         uint256 _reward;
