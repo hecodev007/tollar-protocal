@@ -67,6 +67,7 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
 
     uint256 public tar_supply = 0;
 
+    uint256 dayTime = 24 * 3600;
     /* ========== MODIFIERS ========== */
 
     modifier onlyPools() {
@@ -115,7 +116,7 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
 
     function AddWhitelist(address[] memory whiteList, uint256[]  memory balances, bool isFinished) public onlyByOwnerOrGovernance {
         // 24 * 60 * 60
-        uint32 dayTime = 10;
+        //uint32 dayTime = 10;
         if (curRoundIndex >= 1) {
             require(lastAddWhiteListTime + 30 * dayTime <= currentBlockTimestamp(), "interval of each round should be more than 1 month");
         }
@@ -192,7 +193,7 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
 
     function CanDrawAmount(address account) public view returns (uint256 total){
         uint256 total;
-        uint256 dayTime = 10;
+        //uint256 dayTime = 10;
         uint256 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
@@ -223,11 +224,11 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
 
     function UnlockAmount(address account) public view returns (uint256 total){
         uint256 total;
-        uint256 dayTime = 10;
+        //uint256 dayTime = 10;
         uint256 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
-           // console.log("nTimes:",nTimes);
+            // console.log("nTimes:",nTimes);
             if (nTimes == 0) {
                 continue;
             }
@@ -250,11 +251,11 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
 
     function _CanDrawAmount(address account) internal returns (uint256 total){
         uint256 total;
-        uint256 dayTime = 10;
+       // uint256 dayTime = 10;
         uint256 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
-            console.log("nTimes:",nTimes);
+            console.log("nTimes:", nTimes);
             if (nTimes == 0) {
                 continue;
             }
@@ -315,7 +316,7 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
                 continue;
             }
             mintAmount = mintAmount.add(balance);
-           // console.log("_CanMintAmount:", balance, mintAmount);
+            // console.log("_CanMintAmount:", balance, mintAmount);
         }
         return mintAmount;
     }
@@ -426,6 +427,11 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
     function setTimelock(address new_timelock) external onlyByOwnerOrGovernance {
         require(new_timelock != address(0), "Timelock address cannot be 0");
         timelock_address = new_timelock;
+    }
+
+    function setDayTime(uint256 new_time) external onlyByOwnerOrGovernance {
+        require(new_time != 0, "new_time cannot be 0");
+        dayTime = new_time;
     }
 
     function setUSRAddress(address usr_contract_address) external onlyByOwnerOrGovernance {
