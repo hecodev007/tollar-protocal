@@ -283,9 +283,7 @@ contract UsrIncentive is Owned {
                     fmRound = fmRound.add(1);
                     console.log("FOMOSuccess");
                     emit FOMOSuccess(curTransIndex, USR.superBalanceOf(intensiveAddress).mul(10).div(100), fmRound);
-                }
-
-                if (_IsPair(recipient)) {
+                }else if (_IsPair(recipient)) {
                     if (curTransIndex == rewardCount) {
                         curTransIndex = 0;
                     }
