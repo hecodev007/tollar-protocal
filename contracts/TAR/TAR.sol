@@ -234,7 +234,7 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
             }
             for (uint32 j = 1; j <= nTimes; j++) {
                 BalanceInfo memory bl = RoundMintDetail[i][j][account];
-                if (bl.startTime == 0 || curTime < bl.startTime + dayTime || bl.balance == 0) {
+                if (bl.startTime == 0 || curTime < bl.startTime + dayTime) {
                     continue;
                 }
                 uint256 endTime = bl.startTime + (i + 12) * 30 * dayTime;

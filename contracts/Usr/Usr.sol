@@ -110,7 +110,9 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
         require(_timelock_address != address(0), "Zero address detected");
         name = _name;
         symbol = _symbol;
-        creator_address = _creator_address;
+
+
+
         timelock_address = _timelock_address;
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         DEFAULT_ADMIN_ADDRESS = _msgSender();
