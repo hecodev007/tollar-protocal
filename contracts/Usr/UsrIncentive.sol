@@ -74,6 +74,7 @@ contract UsrIncentive is Owned {
         address _usrAddress,
         address _tarAddress
     ) public Owned(_creator_address){
+
         creator_address = _creator_address;
         timelock_address = _timelock_address;
         intensiveAddress = createContract("intensiveAddress");
@@ -283,7 +284,7 @@ contract UsrIncentive is Owned {
                     fmRound = fmRound.add(1);
                     console.log("FOMOSuccess");
                     emit FOMOSuccess(curTransIndex, USR.superBalanceOf(intensiveAddress).mul(10).div(100), fmRound);
-                }else if (_IsPair(recipient)) {
+                } else if (_IsPair(recipient)) {
                     if (curTransIndex == rewardCount) {
                         curTransIndex = 0;
                     }
@@ -419,7 +420,7 @@ contract UsrIncentive is Owned {
                 }
 
                 _reward = _reward.add(UserLast100Trans[index].amount.mul(10).div(100));
-               // _rank[UserLast100Trans[i].account][i] = 3;
+                // _rank[UserLast100Trans[i].account][i] = 3;
             }
 
             if (i == 0) {
@@ -481,22 +482,21 @@ contract UsrIncentive is Owned {
             }
             if (_rank[UserLast100Trans[i].account][i] == 1) {
                 uint256 reward = UserLast100Trans[i].amount.mul(100).mul(realReward).div(calReward);
-                if (reward > 0) {
+                if (reward > 0 && TAR.balanceOf(intensiveAddress) >= reward) {
                     // console.log("1:",i, reward);
                     AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
                 rewards[fmRound].push(UserReward(UserLast100Trans[i].account, reward, UserLast100Trans[i].amount, 1));
             } else if (_rank[UserLast100Trans[i].account][i] == 2) {
                 uint256 reward = UserLast100Trans[i].amount.mul(10).mul(realReward).div(calReward);
-                if (reward > 0) {
+                if (reward > 0 && TAR.balanceOf(intensiveAddress) >= reward) {
                     //console.log("2:",i, reward);
                     AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
                 rewards[fmRound].push(UserReward(UserLast100Trans[i].account, reward, UserLast100Trans[i].amount, 2));
             } else if (_rank[UserLast100Trans[i].account][i] == 3) {
-                uint256 reward = UserLast100Trans[i].amount.mul(10).mul(realReward).div(calReward).div(100);
-                if (reward > 0) {
-                    // console.log("3:", reward);
+                uint256 reward = UserLast100Trans[i].amount.mul(10).div(100).mul(realReward).div(calReward);
+                if (reward > 0 && TAR.balanceOf(intensiveAddress) >= reward) {
                     AccountAddress(intensiveAddress).transfer(TarAddress, UserLast100Trans[i].account, reward);
                 }
                 rewards[fmRound].push(UserReward(UserLast100Trans[i].account, reward, UserLast100Trans[i].amount, 3));
