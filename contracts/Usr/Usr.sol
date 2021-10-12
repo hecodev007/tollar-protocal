@@ -107,16 +107,13 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
         address _creator_address,
         address _timelock_address
     ) public Owned(_creator_address){
-        require(_timelock_address != address(0), "Zero address detected");
+        require(_timelock_address != address(0) && _creator_address != address(0) , "Zero address detected");
         name = _name;
         symbol = _symbol;
-
-
-
         timelock_address = _timelock_address;
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         DEFAULT_ADMIN_ADDRESS = _msgSender();
-        _mint(creator_address, genesis_supply);
+        _mint(_creator_address, genesis_supply);
         grantRole(COLLATERAL_RATIO_PAUSER, creator_address);
         grantRole(COLLATERAL_RATIO_PAUSER, timelock_address);
         Usr_step = 2500;
