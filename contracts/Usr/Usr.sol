@@ -7,6 +7,7 @@ import "../Common/Context.sol";
 import "../ERC20/IERC20.sol";
 import "../ERC20/ERC20Custom.sol";
 import "../ERC20/ERC20.sol";
+import "../ERC20/Initialize.sol";
 import "../Math/SafeMath.sol";
 import "../Staking/Owned.sol";
 import "../TAR/TAR.sol";
@@ -16,7 +17,8 @@ import "../Oracle/ChainlinkETHUSDPriceConsumer.sol";
 import "../Governance/AccessControl.sol";
 import './UsrIncentive.sol';
 
-contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
+
+contract UsrStablecoin is Initializable,ReentrancyGuardUpgradeSafe,Governable,ERC20Custom, AccessControl {
     using SafeMath for uint256;
 
     /* ========== STATE VARIABLES ========== */
@@ -62,12 +64,12 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
 
     address public DEFAULT_ADMIN_ADDRESS;
     bytes32 public constant COLLATERAL_RATIO_PAUSER = keccak256("COLLATERAL_RATIO_PAUSER");
-    bool public collateral_ratio_paused = false;
+    bool public collateral_ratio_paused ;
 
     address private incentive;
     UsrIncentive private usrIncentive;
-    bool private isOracleReady = false;
-    uint256 public sur_supply = 0;
+    bool private isOracleReady ;
+    uint256 public sur_supply;
     /* ========== MODIFIERS ========== */
 
 
@@ -85,14 +87,14 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
         _;
     }
 
-    modifier onlyByOwnerGovernanceOrController() {
-        require(msg.sender == owner || msg.sender == timelock_address || msg.sender == controller_address, "You are not the owner, controller, or the governance timelock");
-        _;
-    }
+//    modifier onlyByOwnerGovernanceOrController() {
+//        require(msg.sender == owner || msg.sender == timelock_address || msg.sender == controller_address, "You are not the owner, controller, or the governance timelock");
+//        _;
+//    }
 
     modifier onlyByOwnerGovernanceOrPool() {
         require(
-            msg.sender == owner
+            msg.sender == governor
             || msg.sender == timelock_address
             || Usr_pools[msg.sender] == true,
             "You are not the owner, the governance timelock, or a pool");
@@ -100,8 +102,33 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
     }
 
     /* ========== CONSTRUCTOR ========== */
-
-    constructor(
+    function initialize(string memory _name, string memory _symbol, address _creator_address, address _timelock_address) external  initializer {
+        __Governable__init();
+        __ReentrancyGuardUpgradeSafe__init();
+        require(_timelock_address != address(0) && _creator_address != address(0) , "Zero address detected");
+        name = _name;
+        symbol = _symbol;
+        timelock_address = _timelock_address;
+        creator_address = _creator_address;
+        _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        DEFAULT_ADMIN_ADDRESS = _msgSender();
+        _mint(creator_address, genesis_supply);
+        grantRole(COLLATERAL_RATIO_PAUSER, creator_address);
+        grantRole(COLLATERAL_RATIO_PAUSER, timelock_address);
+        Usr_step = 2500;
+        // 6 decimals of precision, equal to 0.25%
+        global_collateral_ratio = 1000000;
+        // Usr system starts off fully collateralized (6 decimals of precision)
+        refresh_cooldown = 3600;
+        // Refresh cooldown period is set to 1 hour (3600 seconds) at genesis
+        price_target = 1000000;
+        // Collateral ratio will adjust according to the $1 price target at genesis
+        price_band = 5000;
+        collateral_ratio_paused = false;
+        isOracleReady = false;
+        sur_supply = 0;
+    }
+    /*constructor(
         string memory _name,
         string memory _symbol,
         address _creator_address,
@@ -130,7 +157,7 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
 
         // intensiveAddress = createContract("intensiveAddress");
     }
-
+*/
 
     function _transfer(
         address sender,

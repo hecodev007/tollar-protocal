@@ -6,13 +6,14 @@ import "hardhat/console.sol";
 import "../Common/Context.sol";
 import "../ERC20/ERC20CustomV1.sol";
 import "../ERC20/IERC20.sol";
+import "../ERC20/Initialize.sol";
 import "../Usr/Usr.sol";
 import "../Staking/Owned.sol";
 import "../Math/SafeMath.sol";
 import "../Governance/AccessControl.sol";
 import '../Uniswap/TransferHelper.sol';
 
-contract Tollar is ERC20CustomV1, AccessControl, Owned {
+contract Tollar is Initializable,ReentrancyGuardUpgradeSafe,Governable,ERC20CustomV1, AccessControl {
     using SafeMath for uint256;
 
     /* ========== STATE VARIABLES ========== */
@@ -28,7 +29,7 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
     address public timelock_address; // Governance timelock address
     UsrStablecoin private USR;
 
-    bool public trackingVotes = true; // Tracking votes (only change if need to disable votes)
+    bool public trackingVotes; // Tracking votes (only change if need to disable votes)
     struct BalanceInfo {
         uint256 balance;
         uint256 total;
@@ -46,9 +47,9 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
 
     mapping(uint32 => mapping(address => RoundInfo)) public RoundsInfo;//round->addr->RoundInfo
     mapping(uint32 => mapping(uint32 => mapping(address => BalanceInfo))) public RoundMintDetail; //round->n times->addr->info
-    uint32  public curRoundIndex = 0;
-    uint256 private addWhiteListTime = 0;
-    uint256 private lastAddWhiteListTime = 0;
+    uint32  public curRoundIndex ;
+    uint256 private addWhiteListTime ;
+    uint256 private lastAddWhiteListTime;
     // A checkpoint for marking number of votes from a given block
     struct Checkpoint {
         uint32 fromBlock;
@@ -65,9 +66,9 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
     // The number of checkpoints for each account
     mapping(address => uint32) public numCheckpoints;
 
-    uint256 public tar_supply = 0;
+    uint256 public tar_supply;
 
-    uint256 dayTime = 24 * 3600;
+    uint256 dayTime ;
     /* ========== MODIFIERS ========== */
 
     modifier onlyPools() {
@@ -75,22 +76,38 @@ contract Tollar is ERC20CustomV1, AccessControl, Owned {
         _;
     }
 
-    modifier onlyByOwnerOrGovernance() {
-        require(msg.sender == owner || msg.sender == timelock_address, "You are not an owner or the governance timelock");
-        _;
-    }
+//    modifier onlyByOwnerOrGovernance() {
+//        require(msg.sender == owner || msg.sender == timelock_address, "You are not an owner or the governance timelock");
+//        _;
+//    }
 
     /* ========== CONSTRUCTOR ========== */
 
-    constructor(
-        string memory _name,
-        string memory _symbol,
-        address _creator_address,
-        address _timelock_address
-    ) public Owned(_creator_address){
+//    constructor(
+//        string memory _name,
+//        string memory _symbol,
+//        address _creator_address,
+//        address _timelock_address
+//    ) public Owned(_creator_address)
+//
+//
+
+    function initialize(string memory _name, string memory _symbol, address _creator_address, address _timelock_address) external  initializer {
+        __Governable__init();
+        __ReentrancyGuardUpgradeSafe__init();
+
         require(_timelock_address != address(0), "Zero address detected");
         name = _name;
         symbol = _symbol;
+
+        trackingVotes = true;
+        tar_supply = 0;
+        dayTime = 24 * 3600;
+
+        curRoundIndex = 0;
+        addWhiteListTime = 0;
+        lastAddWhiteListTime = 0;
+        trackingVotes = true;
 
         timelock_address = _timelock_address;
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());

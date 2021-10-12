@@ -1,0 +1,1059 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+    "txHash": "0x9bb67cea964754b4e2f289842b0a23618e52bc6aead1541f140b41113ec61111",
+    "deployTransaction": {
+      "hash": "0x9bb67cea964754b4e2f289842b0a23618e52bc6aead1541f140b41113ec61111",
+      "type": 2,
+      "accessList": [],
+      "blockHash": "0xe01dfea13b5b3ce8669fdddf725819485ffb8abd36d08f7c03faba3e2e01d4ff",
+      "blockNumber": 3,
+      "transactionIndex": 0,
+      "confirmations": 1,
+      "from": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+      "gasPrice": {
+        "type": "BigNumber",
+        "hex": "0x6541cb37"
+      },
+      "maxPriorityFeePerGas": {
+        "type": "BigNumber",
+        "hex": "0x3b9aca00"
+      },
+      "maxFeePerGas": {
+        "type": "BigNumber",
+        "hex": "0x8ee8cc6e"
+      },
+      "gasLimit": {
+        "type": "BigNumber",
+        "hex": "0x0762b4"
+      },
+      "to": null,
+      "value": {
+        "type": "BigNumber",
+        "hex": "0x00"
+      },
+      "nonce": 2,
+      "data": "0x608060405234801561001057600080fd5b50600080546001600160a01b031916339081178255604051909182917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a350610759806100616000396000f3fe60806040526004361061007b5760003560e01c80639623609d1161004e5780639623609d1461011157806399a88ec414610124578063f2fde38b14610144578063f3b7dead146101645761007b565b8063204e1c7a14610080578063715018a6146100bc5780637eff275e146100d35780638da5cb5b146100f3575b600080fd5b34801561008c57600080fd5b506100a061009b366004610515565b610184565b6040516001600160a01b03909116815260200160405180910390f35b3480156100c857600080fd5b506100d1610215565b005b3480156100df57600080fd5b506100d16100ee366004610554565b610292565b3480156100ff57600080fd5b506000546001600160a01b03166100a0565b6100d161011f36600461058c565b61031c565b34801561013057600080fd5b506100d161013f366004610554565b6103ad565b34801561015057600080fd5b506100d161015f366004610515565b610405565b34801561017057600080fd5b506100a061017f366004610515565b6104ef565b6000806000836001600160a01b03166040516101aa90635c60da1b60e01b815260040190565b600060405180830381855afa9150503d80600081146101e5576040519150601f19603f3d011682016040523d82523d6000602084013e6101ea565b606091505b5091509150816101f957600080fd5b8080602001905181019061020d9190610538565b949350505050565b6000546001600160a01b031633146102485760405162461bcd60e51b815260040161023f906106c0565b60405180910390fd5b600080546040516001600160a01b03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a3600080546001600160a01b0319169055565b6000546001600160a01b031633146102bc5760405162461bcd60e51b815260040161023f906106c0565b6040516308f2839760e41b81526001600160a01b038281166004830152831690638f283970906024015b600060405180830381600087803b15801561030057600080fd5b505af1158015610314573d6000803e3d6000fd5b505050505050565b6000546001600160a01b031633146103465760405162461bcd60e51b815260040161023f906106c0565b60405163278f794360e11b81526001600160a01b03841690634f1ef286903490610376908690869060040161065d565b6000604051808303818588803b15801561038f57600080fd5b505af11580156103a3573d6000803e3d6000fd5b5050505050505050565b6000546001600160a01b031633146103d75760405162461bcd60e51b815260040161023f906106c0565b604051631b2ce7f360e11b81526001600160a01b038281166004830152831690633659cfe6906024016102e6565b6000546001600160a01b0316331461042f5760405162461bcd60e51b815260040161023f906106c0565b6001600160a01b0381166104945760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b606482015260840161023f565b600080546040516001600160a01b03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080546001600160a01b0319166001600160a01b0392909216919091179055565b6000806000836001600160a01b03166040516101aa906303e1469160e61b815260040190565b600060208284031215610526578081fd5b81356105318161070b565b9392505050565b600060208284031215610549578081fd5b81516105318161070b565b60008060408385031215610566578081fd5b82356105718161070b565b915060208301356105818161070b565b809150509250929050565b6000806000606084860312156105a0578081fd5b83356105ab8161070b565b925060208401356105bb8161070b565b9150604084013567ffffffffffffffff808211156105d7578283fd5b818601915086601f8301126105ea578283fd5b8135818111156105fc576105fc6106f5565b604051601f8201601f19908116603f01168101908382118183101715610624576106246106f5565b8160405282815289602084870101111561063c578586fd5b82602086016020830137856020848301015280955050505050509250925092565b600060018060a01b038416825260206040818401528351806040850152825b818110156106985785810183015185820160600152820161067c565b818111156106a95783606083870101525b50601f01601f191692909201606001949350505050565b6020808252818101527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604082015260600190565b634e487b7160e01b600052604160045260246000fd5b6001600160a01b038116811461072057600080fd5b5056fea2646970667358221220d849f96f3086b9f82cdcf665adb8c697ace05638da1c7c16ab2d26293717af6764736f6c63430008020033",
+      "r": "0x806e5ba7c5d3d0703f6c2218038ac343119fa9a8a7cf43b6aed64fd1a7236803",
+      "s": "0x1d616ae74ea96ad9e3efc9fbfd8597d264a8e0e8c2e9a6db50e862af45f0d84b",
+      "v": 1,
+      "creates": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      "chainId": 31337
+    }
+  },
+  "proxies": [
+    {
+      "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
+      "txHash": "0x7605c206d994a16bcef5cb8ac3b8e9cf6e77cfac189a05dee287c21d0b258fad",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      "txHash": "0xcc718b3a4950cf63988e4a08e2771e564b25b75f32b1e243d3ff872edfd14b79",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+      "txHash": "0x6ab78c58ad8f5aee1f609b78ef823c32cb2ebad43cab9a8ad351e0685dc87a2e",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "0677fb54856cfdd0f2036fcf7b535e9afd49b715b7a2d2cb4358b076fc1d05e3": {
+      "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "txHash": "0xbc3b770478fac10bf3549b0360f0f463193b4ffe58297367f988c4bb7d68309f",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "contracts\\ERC20\\Initialize.sol:5"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "contracts\\ERC20\\Initialize.sol:10"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeSafe",
+            "label": "_guardCounter",
+            "type": "t_uint256",
+            "src": "contracts\\ERC20\\Initialize.sol:87"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeSafe",
+            "label": "______gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "contracts\\ERC20\\Initialize.sol:109"
+          },
+          {
+            "contract": "Governable",
+            "label": "governor",
+            "type": "t_address",
+            "src": "contracts\\ERC20\\Initialize.sol:52"
+          },
+          {
+            "contract": "Governable",
+            "label": "pendingGovernor",
+            "type": "t_address",
+            "src": "contracts\\ERC20\\Initialize.sol:53"
+          },
+          {
+            "contract": "ERC20Custom",
+            "label": "_balances",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "contracts\\ERC20\\ERC20Custom.sol:39"
+          },
+          {
+            "contract": "ERC20Custom",
+            "label": "_allowances",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "src": "contracts\\ERC20\\ERC20Custom.sol:41"
+          },
+          {
+            "contract": "ERC20Custom",
+            "label": "_totalSupply",
+            "type": "t_uint256",
+            "src": "contracts\\ERC20\\ERC20Custom.sol:43"
+          },
+          {
+            "contract": "AccessControl",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)3912_storage)",
+            "src": "contracts\\Governance\\AccessControl.sol:53"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "eth_usd_pricer",
+            "type": "t_contract(ChainlinkETHUSDPriceConsumer)5687",
+            "src": "contracts\\Usr\\Usr.sol:25"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "eth_usd_pricer_decimals",
+            "type": "t_uint8",
+            "src": "contracts\\Usr\\Usr.sol:26"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "tarUsrOracle",
+            "type": "t_contract(UniswapPairOracle)6380",
+            "src": "contracts\\Usr\\Usr.sol:27"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "usrUsdOracle",
+            "type": "t_contract(UniswapPairOracle)6380",
+            "src": "contracts\\Usr\\Usr.sol:28"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "tarUsr24HOracle",
+            "type": "t_contract(UniswapPairOracle)6380",
+            "src": "contracts\\Usr\\Usr.sol:29"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "usrUsd24HOracle",
+            "type": "t_contract(UniswapPairOracle)6380",
+            "src": "contracts\\Usr\\Usr.sol:30"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "symbol",
+            "type": "t_string_storage",
+            "src": "contracts\\Usr\\Usr.sol:31"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "name",
+            "type": "t_string_storage",
+            "src": "contracts\\Usr\\Usr.sol:32"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "creator_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:35"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "timelock_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:36"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "controller_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:37"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "tar_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:38"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "tar_usr_oracle_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:39"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "usr_usd_oracle_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:40"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "tar_usr_24H_oracle_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:41"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "usr_usd_24H_oracle_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:42"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "weth_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:43"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "eth_usd_consumer_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:44"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "Usr_pools_array",
+            "type": "t_array(t_address)dyn_storage",
+            "src": "contracts\\Usr\\Usr.sol:49"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "Usr_pools",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "contracts\\Usr\\Usr.sol:52"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "global_collateral_ratio",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\Usr.sol:57"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "redemption_fee",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\Usr.sol:58"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "minting_fee",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\Usr.sol:59"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "Usr_step",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\Usr.sol:60"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "refresh_cooldown",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\Usr.sol:61"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "price_target",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\Usr.sol:62"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "price_band",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\Usr.sol:63"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "DEFAULT_ADMIN_ADDRESS",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:65"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "collateral_ratio_paused",
+            "type": "t_bool",
+            "src": "contracts\\Usr\\Usr.sol:67"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "incentive",
+            "type": "t_address",
+            "src": "contracts\\Usr\\Usr.sol:69"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "usrIncentive",
+            "type": "t_contract(UsrIncentive)23989",
+            "src": "contracts\\Usr\\Usr.sol:70"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "isOracleReady",
+            "type": "t_bool",
+            "src": "contracts\\Usr\\Usr.sol:71"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "sur_supply",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\Usr.sol:72"
+          },
+          {
+            "contract": "UsrStablecoin",
+            "label": "last_call_time",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\Usr.sol:293"
+          }
+        ],
+        "types": {
+          "t_contract(ChainlinkETHUSDPriceConsumer)5687": {
+            "label": "contract ChainlinkETHUSDPriceConsumer"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_contract(UniswapPairOracle)6380": {
+            "label": "contract UniswapPairOracle"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_contract(UsrIncentive)23989": {
+            "label": "contract UsrIncentive"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)3912_storage)": {
+            "label": "mapping(bytes32 => struct AccessControl.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)3912_storage": {
+            "label": "struct AccessControl.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_struct(AddressSet)24430_storage"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_struct(AddressSet)24430_storage": {
+            "label": "struct EnumerableSet.AddressSet",
+            "members": [
+              {
+                "label": "_inner",
+                "type": "t_struct(Set)24244_storage"
+              }
+            ]
+          },
+          "t_struct(Set)24244_storage": {
+            "label": "struct EnumerableSet.Set",
+            "members": [
+              {
+                "label": "_values",
+                "type": "t_array(t_bytes32)dyn_storage"
+              },
+              {
+                "label": "_indexes",
+                "type": "t_mapping(t_bytes32,t_uint256)"
+              }
+            ]
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]"
+          },
+          "t_mapping(t_bytes32,t_uint256)": {
+            "label": "mapping(bytes32 => uint256)"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "8068cc303ea3835d7fc221ea5665786289199b8672e725028fd9940a04aeeab1": {
+      "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
+      "txHash": "0xbee07dd4aa48788cf0d74f7f0da904856772924e5cee46f0066ab74aa3989747",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "contracts\\ERC20\\Initialize.sol:5"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "contracts\\ERC20\\Initialize.sol:10"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeSafe",
+            "label": "_guardCounter",
+            "type": "t_uint256",
+            "src": "contracts\\ERC20\\Initialize.sol:87"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeSafe",
+            "label": "______gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "contracts\\ERC20\\Initialize.sol:109"
+          },
+          {
+            "contract": "Governable",
+            "label": "governor",
+            "type": "t_address",
+            "src": "contracts\\ERC20\\Initialize.sol:52"
+          },
+          {
+            "contract": "Governable",
+            "label": "pendingGovernor",
+            "type": "t_address",
+            "src": "contracts\\ERC20\\Initialize.sol:53"
+          },
+          {
+            "contract": "ERC20CustomV1",
+            "label": "_balances",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "contracts\\ERC20\\ERC20CustomV1.sol:39"
+          },
+          {
+            "contract": "ERC20CustomV1",
+            "label": "_allowances",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "src": "contracts\\ERC20\\ERC20CustomV1.sol:41"
+          },
+          {
+            "contract": "ERC20CustomV1",
+            "label": "_totalSupply",
+            "type": "t_uint256",
+            "src": "contracts\\ERC20\\ERC20CustomV1.sol:43"
+          },
+          {
+            "contract": "AccessControl",
+            "label": "_roles",
+            "type": "t_mapping(t_bytes32,t_struct(RoleData)3912_storage)",
+            "src": "contracts\\Governance\\AccessControl.sol:53"
+          },
+          {
+            "contract": "Tollar",
+            "label": "symbol",
+            "type": "t_string_storage",
+            "src": "contracts\\TAR\\TAR.sol:21"
+          },
+          {
+            "contract": "Tollar",
+            "label": "name",
+            "type": "t_string_storage",
+            "src": "contracts\\TAR\\TAR.sol:22"
+          },
+          {
+            "contract": "Tollar",
+            "label": "USRStableCoinAddr",
+            "type": "t_address",
+            "src": "contracts\\TAR\\TAR.sol:24"
+          },
+          {
+            "contract": "Tollar",
+            "label": "team_address",
+            "type": "t_address",
+            "src": "contracts\\TAR\\TAR.sol:25"
+          },
+          {
+            "contract": "Tollar",
+            "label": "intensiveAddress",
+            "type": "t_address",
+            "src": "contracts\\TAR\\TAR.sol:26"
+          },
+          {
+            "contract": "Tollar",
+            "label": "timelock_address",
+            "type": "t_address",
+            "src": "contracts\\TAR\\TAR.sol:29"
+          },
+          {
+            "contract": "Tollar",
+            "label": "USR",
+            "type": "t_contract(UsrStablecoin)21845",
+            "src": "contracts\\TAR\\TAR.sol:30"
+          },
+          {
+            "contract": "Tollar",
+            "label": "trackingVotes",
+            "type": "t_bool",
+            "src": "contracts\\TAR\\TAR.sol:32"
+          },
+          {
+            "contract": "Tollar",
+            "label": "Rounds",
+            "type": "t_mapping(t_uint32,t_mapping(t_address,t_struct(BalanceInfo)7044_storage))",
+            "src": "contracts\\TAR\\TAR.sol:46"
+          },
+          {
+            "contract": "Tollar",
+            "label": "RoundsInfo",
+            "type": "t_mapping(t_uint32,t_mapping(t_address,t_struct(RoundInfo)7051_storage))",
+            "src": "contracts\\TAR\\TAR.sol:48"
+          },
+          {
+            "contract": "Tollar",
+            "label": "RoundMintDetail",
+            "type": "t_mapping(t_uint32,t_mapping(t_uint32,t_mapping(t_address,t_struct(BalanceInfo)7044_storage)))",
+            "src": "contracts\\TAR\\TAR.sol:49"
+          },
+          {
+            "contract": "Tollar",
+            "label": "curRoundIndex",
+            "type": "t_uint32",
+            "src": "contracts\\TAR\\TAR.sol:50"
+          },
+          {
+            "contract": "Tollar",
+            "label": "addWhiteListTime",
+            "type": "t_uint256",
+            "src": "contracts\\TAR\\TAR.sol:51"
+          },
+          {
+            "contract": "Tollar",
+            "label": "lastAddWhiteListTime",
+            "type": "t_uint256",
+            "src": "contracts\\TAR\\TAR.sol:52"
+          },
+          {
+            "contract": "Tollar",
+            "label": "lastMint",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "contracts\\TAR\\TAR.sol:59"
+          },
+          {
+            "contract": "Tollar",
+            "label": "mintBalance",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "contracts\\TAR\\TAR.sol:60"
+          },
+          {
+            "contract": "Tollar",
+            "label": "mintWithDraw",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "contracts\\TAR\\TAR.sol:61"
+          },
+          {
+            "contract": "Tollar",
+            "label": "checkpoints",
+            "type": "t_mapping(t_address,t_mapping(t_uint32,t_struct(Checkpoint)7085_storage))",
+            "src": "contracts\\TAR\\TAR.sol:64"
+          },
+          {
+            "contract": "Tollar",
+            "label": "numCheckpoints",
+            "type": "t_mapping(t_address,t_uint32)",
+            "src": "contracts\\TAR\\TAR.sol:67"
+          },
+          {
+            "contract": "Tollar",
+            "label": "tar_supply",
+            "type": "t_uint256",
+            "src": "contracts\\TAR\\TAR.sol:69"
+          },
+          {
+            "contract": "Tollar",
+            "label": "dayTime",
+            "type": "t_uint256",
+            "src": "contracts\\TAR\\TAR.sol:71"
+          }
+        ],
+        "types": {
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_contract(UsrStablecoin)21845": {
+            "label": "contract UsrStablecoin"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_uint32,t_mapping(t_address,t_struct(BalanceInfo)7044_storage))": {
+            "label": "mapping(uint32 => mapping(address => struct Tollar.BalanceInfo))"
+          },
+          "t_uint32": {
+            "label": "uint32"
+          },
+          "t_mapping(t_address,t_struct(BalanceInfo)7044_storage)": {
+            "label": "mapping(address => struct Tollar.BalanceInfo)"
+          },
+          "t_struct(BalanceInfo)7044_storage": {
+            "label": "struct Tollar.BalanceInfo",
+            "members": [
+              {
+                "label": "balance",
+                "type": "t_uint256"
+              },
+              {
+                "label": "total",
+                "type": "t_uint256"
+              },
+              {
+                "label": "startTime",
+                "type": "t_uint256"
+              },
+              {
+                "label": "lockTime",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_uint32,t_mapping(t_address,t_struct(RoundInfo)7051_storage))": {
+            "label": "mapping(uint32 => mapping(address => struct Tollar.RoundInfo))"
+          },
+          "t_mapping(t_address,t_struct(RoundInfo)7051_storage)": {
+            "label": "mapping(address => struct Tollar.RoundInfo)"
+          },
+          "t_struct(RoundInfo)7051_storage": {
+            "label": "struct Tollar.RoundInfo",
+            "members": [
+              {
+                "label": "balance",
+                "type": "t_uint256"
+              },
+              {
+                "label": "total",
+                "type": "t_uint256"
+              },
+              {
+                "label": "nTimes",
+                "type": "t_uint32"
+              }
+            ]
+          },
+          "t_mapping(t_uint32,t_mapping(t_uint32,t_mapping(t_address,t_struct(BalanceInfo)7044_storage)))": {
+            "label": "mapping(uint32 => mapping(uint32 => mapping(address => struct Tollar.BalanceInfo)))"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_mapping(t_address,t_mapping(t_uint32,t_struct(Checkpoint)7085_storage))": {
+            "label": "mapping(address => mapping(uint32 => struct Tollar.Checkpoint))"
+          },
+          "t_mapping(t_uint32,t_struct(Checkpoint)7085_storage)": {
+            "label": "mapping(uint32 => struct Tollar.Checkpoint)"
+          },
+          "t_struct(Checkpoint)7085_storage": {
+            "label": "struct Tollar.Checkpoint",
+            "members": [
+              {
+                "label": "fromBlock",
+                "type": "t_uint32"
+              },
+              {
+                "label": "votes",
+                "type": "t_uint96"
+              }
+            ]
+          },
+          "t_uint96": {
+            "label": "uint96"
+          },
+          "t_mapping(t_address,t_uint32)": {
+            "label": "mapping(address => uint32)"
+          },
+          "t_mapping(t_bytes32,t_struct(RoleData)3912_storage)": {
+            "label": "mapping(bytes32 => struct AccessControl.RoleData)"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_struct(RoleData)3912_storage": {
+            "label": "struct AccessControl.RoleData",
+            "members": [
+              {
+                "label": "members",
+                "type": "t_struct(AddressSet)24430_storage"
+              },
+              {
+                "label": "adminRole",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_struct(AddressSet)24430_storage": {
+            "label": "struct EnumerableSet.AddressSet",
+            "members": [
+              {
+                "label": "_inner",
+                "type": "t_struct(Set)24244_storage"
+              }
+            ]
+          },
+          "t_struct(Set)24244_storage": {
+            "label": "struct EnumerableSet.Set",
+            "members": [
+              {
+                "label": "_values",
+                "type": "t_array(t_bytes32)dyn_storage"
+              },
+              {
+                "label": "_indexes",
+                "type": "t_mapping(t_bytes32,t_uint256)"
+              }
+            ]
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]"
+          },
+          "t_mapping(t_bytes32,t_uint256)": {
+            "label": "mapping(bytes32 => uint256)"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    },
+    "40c4cec0addcc0746db617e3a0c6665ba1647fecadcde2ebff4b7116f83dc5b9": {
+      "address": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+      "txHash": "0x485ee5725e5503818aaeac2d77e1a6d0379fc22811bb4c7199ec4c84aba58824",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "contracts\\ERC20\\Initialize.sol:5"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "contracts\\ERC20\\Initialize.sol:10"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeSafe",
+            "label": "_guardCounter",
+            "type": "t_uint256",
+            "src": "contracts\\ERC20\\Initialize.sol:87"
+          },
+          {
+            "contract": "ReentrancyGuardUpgradeSafe",
+            "label": "______gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "contracts\\ERC20\\Initialize.sol:109"
+          },
+          {
+            "contract": "Governable",
+            "label": "governor",
+            "type": "t_address",
+            "src": "contracts\\ERC20\\Initialize.sol:52"
+          },
+          {
+            "contract": "Governable",
+            "label": "pendingGovernor",
+            "type": "t_address",
+            "src": "contracts\\ERC20\\Initialize.sol:53"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "declineDays",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\UsrIncentive.sol:29"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "curDeclineDays",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\UsrIncentive.sol:30"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "creator_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\UsrIncentive.sol:31"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "timelock_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\UsrIncentive.sol:32"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "PAIR",
+            "type": "t_contract(IUniswapV2Pair)10111",
+            "src": "contracts\\Usr\\UsrIncentive.sol:34"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "pair_address",
+            "type": "t_address",
+            "src": "contracts\\Usr\\UsrIncentive.sol:35"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "UserLast100Trans",
+            "type": "t_array(t_struct(UserTrans)21870_storage)100_storage",
+            "src": "contracts\\Usr\\UsrIncentive.sol:37"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "curTransIndex",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\UsrIncentive.sol:38"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "lastTransTimeStamp",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\UsrIncentive.sol:39"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "rewardCount",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\UsrIncentive.sol:40"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "isStartFOMO",
+            "type": "t_bool",
+            "src": "contracts\\Usr\\UsrIncentive.sol:41"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "SuccessFOMO",
+            "type": "t_bool",
+            "src": "contracts\\Usr\\UsrIncentive.sol:42"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "curRound",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\UsrIncentive.sol:43"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "transInterval",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\UsrIncentive.sol:44"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "fomoThreshold",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\UsrIncentive.sol:47"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "IsPenalty",
+            "type": "t_bool",
+            "src": "contracts\\Usr\\UsrIncentive.sol:48"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "intensive",
+            "type": "t_mapping(t_address,t_bool)",
+            "src": "contracts\\Usr\\UsrIncentive.sol:49"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "intensiveAddress",
+            "type": "t_address",
+            "src": "contracts\\Usr\\UsrIncentive.sol:50"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "penaltyAddress",
+            "type": "t_address",
+            "src": "contracts\\Usr\\UsrIncentive.sol:51"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "UsrAddress",
+            "type": "t_address",
+            "src": "contracts\\Usr\\UsrIncentive.sol:52"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "TarAddress",
+            "type": "t_address",
+            "src": "contracts\\Usr\\UsrIncentive.sol:53"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "USR",
+            "type": "t_contract(UsrStablecoin)21845",
+            "src": "contracts\\Usr\\UsrIncentive.sol:54"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "TAR",
+            "type": "t_contract(Tollar)9243",
+            "src": "contracts\\Usr\\UsrIncentive.sol:55"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "lastTarUsd24H",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\UsrIncentive.sol:56"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "_tarUsd24H",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\UsrIncentive.sol:57"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "fmRound",
+            "type": "t_uint256",
+            "src": "contracts\\Usr\\UsrIncentive.sol:58"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "rewards",
+            "type": "t_mapping(t_uint256,t_array(t_struct(UserReward)21879_storage)dyn_storage)",
+            "src": "contracts\\Usr\\UsrIncentive.sol:61"
+          },
+          {
+            "contract": "UsrIncentive",
+            "label": "_rank",
+            "type": "t_mapping(t_address,t_mapping(t_uint256,t_uint256))",
+            "src": "contracts\\Usr\\UsrIncentive.sol:62"
+          }
+        ],
+        "types": {
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_contract(IUniswapV2Pair)10111": {
+            "label": "contract IUniswapV2Pair"
+          },
+          "t_array(t_struct(UserTrans)21870_storage)100_storage": {
+            "label": "struct UsrIncentive.UserTrans[100]"
+          },
+          "t_struct(UserTrans)21870_storage": {
+            "label": "struct UsrIncentive.UserTrans",
+            "members": [
+              {
+                "label": "account",
+                "type": "t_address"
+              },
+              {
+                "label": "amount",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_contract(UsrStablecoin)21845": {
+            "label": "contract UsrStablecoin"
+          },
+          "t_contract(Tollar)9243": {
+            "label": "contract Tollar"
+          },
+          "t_mapping(t_uint256,t_array(t_struct(UserReward)21879_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct UsrIncentive.UserReward[])"
+          },
+          "t_array(t_struct(UserReward)21879_storage)dyn_storage": {
+            "label": "struct UsrIncentive.UserReward[]"
+          },
+          "t_struct(UserReward)21879_storage": {
+            "label": "struct UsrIncentive.UserReward",
+            "members": [
+              {
+                "label": "account",
+                "type": "t_address"
+              },
+              {
+                "label": "reward",
+                "type": "t_uint256"
+              },
+              {
+                "label": "amount",
+                "type": "t_uint256"
+              },
+              {
+                "label": "level",
+                "type": "t_uint256"
+              }
+            ]
+          },
+          "t_mapping(t_address,t_mapping(t_uint256,t_uint256))": {
+            "label": "mapping(address => mapping(uint256 => uint256))"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          }
+        }
+      }
+    }
+  }
+}

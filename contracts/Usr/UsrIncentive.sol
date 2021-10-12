@@ -7,9 +7,10 @@ import "./Usr.sol";
 import '../Uniswap/Interfaces/IUniswapV2Pair.sol';
 import '../Uniswap/UniswapV2Library.sol';
 import '../TAR/TAR.sol';
+import "../ERC20/Initialize.sol";
 import "hardhat/console.sol";
 
-contract UsrIncentive is Owned {
+contract UsrIncentive is Initializable, ReentrancyGuardUpgradeSafe, Governable {
     using SafeMath for uint256;
 
     struct UserTrans {
@@ -25,8 +26,8 @@ contract UsrIncentive is Owned {
     }
     /* ========== STATE VARIABLES ========== */
 
-    uint public declineDays = 7;   //
-    uint  public curDeclineDays = 0;
+    uint public declineDays;   //
+    uint  public curDeclineDays;
     address public creator_address;
     address public timelock_address; // Governance timelock address
 
@@ -34,17 +35,17 @@ contract UsrIncentive is Owned {
     address private pair_address;
 
     UserTrans[100]  public UserLast100Trans;
-    uint256 public curTransIndex = 0;
-    uint256 private lastTransTimeStamp = 0;
-    uint public rewardCount = 100;
-    bool public isStartFOMO = false;
-    bool private SuccessFOMO = false;
-    uint256 private curRound = 1;
-    uint256 private transInterval = 10 * 60;//10 mins
+    uint256 public curTransIndex;
+    uint256 private lastTransTimeStamp;
+    uint public rewardCount;
+    bool public isStartFOMO;
+    bool private SuccessFOMO;
+    uint256 private curRound;
+    uint256 private transInterval;//10 mins
     // Constants for various precisions
     uint256 private constant PRICE_PRECISION = 1e6;
-    uint256 public fomoThreshold = 100e18;
-    bool public IsPenalty = false; //
+    uint256 public fomoThreshold;
+    bool public IsPenalty; //
     mapping(address => bool) public intensive;//swap pair include usr
     address public intensiveAddress;
     address public penaltyAddress;
@@ -52,9 +53,9 @@ contract UsrIncentive is Owned {
     address private TarAddress;
     UsrStablecoin private USR;
     Tollar private TAR;
-    uint256 private lastTarUsd24H = 0;
-    uint256 private  _tarUsd24H = 0;
-    uint256 public fmRound = 0;
+    uint256 private lastTarUsd24H;
+    uint256 private  _tarUsd24H;
+    uint256 public fmRound;
     //round->addr->value
     //mapping(uint256 => mapping(address => UserReward)) public rewards;
     mapping(uint256 => UserReward[]) public rewards;
@@ -63,18 +64,40 @@ contract UsrIncentive is Owned {
         require(UsrAddress == msg.sender, "only Usr");
         _;
     }
-    modifier onlyByOwnerGovernanceOrController() {
-        require(msg.sender == owner || msg.sender == timelock_address, "You are not the owner, controller, or the governance timelock");
-        _;
-    }
+    //    modifier onlyByOwnerGovernanceOrController() {
+    //        require(msg.sender == owner || msg.sender == timelock_address, "You are not the owner, controller, or the governance timelock");
+    //        _;
+    //    }
 
-    constructor(
-        address _creator_address,
+    //    constructor(
+    //        address _creator_address,
+    //        address _timelock_address,
+    //        address _usrAddress,
+    //        address _tarAddress
+    //    ) public Owned(_creator_address)
+
+
+    function initialize(address _creator_address,
         address _timelock_address,
         address _usrAddress,
-        address _tarAddress
-    ) public Owned(_creator_address){
-
+        address _tarAddress) external initializer {
+        __Governable__init();
+        __ReentrancyGuardUpgradeSafe__init();
+        curTransIndex = 0;
+        lastTransTimeStamp = 0;
+        rewardCount = 100;
+        isStartFOMO = false;
+        SuccessFOMO = false;
+        curRound = 1;
+        transInterval = 10 * 60;
+        //10 mins
+        fomoThreshold = 100e18;
+        lastTarUsd24H = 0;
+        _tarUsd24H = 0;
+        fmRound = 0;
+        declineDays = 7;
+        curDeclineDays = 0;
+        IsPenalty = false;
         creator_address = _creator_address;
         timelock_address = _timelock_address;
         intensiveAddress = createContract("intensiveAddress");
