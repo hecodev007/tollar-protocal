@@ -117,7 +117,7 @@ module.exports = {
             url: `https://rinkeby.infura.io/v3/85c51263825545bf8496006327bd98d1`,
             accounts: [mnemonic],
             chainId: 4,
-            gas: "auto",
+            gas: 2000000,
             gasPrice: "auto",
             gasMultiplier: 1.2
         }
