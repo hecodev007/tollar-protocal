@@ -114,7 +114,7 @@ contract UsrStablecoin is ERC20Custom, AccessControl, Owned {
         creator_address = _creator_address;
         _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
         DEFAULT_ADMIN_ADDRESS = _msgSender();
-        _mint(_creator_address, genesis_supply);
+        _mint(creator_address, genesis_supply);
         grantRole(COLLATERAL_RATIO_PAUSER, creator_address);
         grantRole(COLLATERAL_RATIO_PAUSER, timelock_address);
         Usr_step = 2500;
