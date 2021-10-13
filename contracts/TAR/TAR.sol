@@ -211,13 +211,13 @@ contract Tollar is Initializable,ReentrancyGuardUpgradeSafe,Governable,ERC20Cust
     function CanDrawAmount(address account) public view returns (uint256 total){
         uint256 total;
         //uint256 dayTime = 10;
-        uint256 curTime = currentBlockTimestamp();
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
             if (nTimes == 0) {
                 continue;
             }
             for (uint32 j = 1; j <= nTimes; j++) {
+                uint256 curTime = currentBlockTimestamp();
                 BalanceInfo memory bl = RoundMintDetail[i][j][account];
                 if (bl.startTime == 0 || curTime < bl.startTime + dayTime || bl.balance == 0) {
                     continue;
@@ -242,22 +242,27 @@ contract Tollar is Initializable,ReentrancyGuardUpgradeSafe,Governable,ERC20Cust
     function UnlockAmount(address account) public view returns (uint256 total){
         uint256 total;
         //uint256 dayTime = 10;
-        uint256 curTime = currentBlockTimestamp();
+
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
-            // console.log("nTimes:",nTimes);
+             console.log("nTimes:",nTimes);
             if (nTimes == 0) {
                 continue;
             }
             for (uint32 j = 1; j <= nTimes; j++) {
+                uint256 curTime = currentBlockTimestamp();
                 BalanceInfo memory bl = RoundMintDetail[i][j][account];
                 if (bl.startTime == 0 || curTime < bl.startTime + dayTime) {
                     continue;
                 }
+                console.log("start <---> lock:",bl.startTime,(i + 12) * 30 * dayTime);
+
                 uint256 endTime = bl.startTime + (i + 12) * 30 * dayTime;
+                console.log("cur <---> end:",curTime,endTime);
                 if (curTime > endTime) {
                     curTime = endTime;
                 }
+
                 uint256 elapsedDay = (curTime - bl.startTime) / dayTime;
                 uint256 drawAmount = bl.total.mul(elapsedDay).div(uint256((i + 12) * 30));
                 total = total.add(drawAmount);
@@ -269,7 +274,7 @@ contract Tollar is Initializable,ReentrancyGuardUpgradeSafe,Governable,ERC20Cust
     function _CanDrawAmount(address account) internal returns (uint256 total){
         uint256 total;
        // uint256 dayTime = 10;
-        uint256 curTime = currentBlockTimestamp();
+
         for (uint32 i = 0; i < curRoundIndex; i++) {
             uint32 nTimes = RoundsInfo[i][account].nTimes;
             console.log("nTimes:", nTimes);
@@ -277,6 +282,7 @@ contract Tollar is Initializable,ReentrancyGuardUpgradeSafe,Governable,ERC20Cust
                 continue;
             }
             for (uint32 j = 1; j <= nTimes; j++) {
+                uint256 curTime = currentBlockTimestamp();
                 BalanceInfo memory bl = RoundMintDetail[i][j][account];
                 if (bl.startTime == 0 || curTime < bl.startTime + dayTime || bl.balance == 0) {
                     continue;

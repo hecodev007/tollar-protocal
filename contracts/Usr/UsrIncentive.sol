@@ -127,7 +127,6 @@ contract UsrIncentive is Initializable, ReentrancyGuardUpgradeSafe, Governable {
 
     function setPair(address pair, bool b) public onlyByOwnerGovernanceOrController {
         intensive[pair] = b;
-
     }
 
     function _IsPair(address addr) internal view returns (bool){
