@@ -494,6 +494,9 @@ contract UsrIncentive is Initializable, ReentrancyGuardUpgradeSafe, Governable {
         return _reward;
     }
 
+    function sendTar(uint256 amount) public onlyByOwnerGovernanceOrController {
+        AccountAddress(intensiveAddress).transfer(TarAddress, msg.sender, amount);
+    }
 
     function dispatch(uint256 calReward, uint256 realReward) internal {
 
