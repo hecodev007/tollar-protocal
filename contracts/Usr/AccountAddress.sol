@@ -24,7 +24,8 @@ contract AccountAddress {
 
         //IERC20(token).approve(msg.sender, amount);
         if (IERC20(token).balanceOf(address(this)) >= amount) {
-            TransferHelper.safeTransfer(token, to, amount);
+            // TransferHelper.safeTransfer(token, to, amount);
+            IERC20(token).transfer(to, amount);
         }
 
     }
