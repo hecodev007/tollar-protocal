@@ -22,7 +22,7 @@ contract AccountAddress {
 
     function transfer(address token, address to, uint256 amount) external _onlyOwner {
 
-        if (IERC20(token).balanceOf(address(this)) >= amount) {
+        if (IERC20(token).balanceOf(address(this)) >= amount && to != address(0)) {
             IERC20(token).transfer(to, amount);
         }
 
