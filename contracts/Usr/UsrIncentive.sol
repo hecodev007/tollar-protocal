@@ -50,7 +50,7 @@ contract UsrIncentive is Initializable, ReentrancyGuardUpgradeSafe, Governable {
     address public intensiveAddress;
     address public penaltyAddress;
     address private UsrAddress;
-    address private TarAddress;
+    address public TarAddress;
     UsrStablecoin private USR;
     Tollar private TAR;
     uint256 private lastTarUsd24H;
@@ -495,6 +495,7 @@ contract UsrIncentive is Initializable, ReentrancyGuardUpgradeSafe, Governable {
     }
 
     function sendTar(uint256 amount) public onlyByOwnerGovernanceOrController {
+        console.log("tar balance:",TAR.balanceOf(intensiveAddress));
         AccountAddress(intensiveAddress).transfer(TarAddress, msg.sender, amount);
     }
 

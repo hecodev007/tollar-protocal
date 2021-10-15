@@ -2,6 +2,7 @@ pragma solidity >=0.6.11;
 
 import '../Uniswap/TransferHelper.sol';
 import '../ERC20/IERC20.sol';
+import "hardhat/console.sol";
 
 contract AccountAddress {
     address private owner;
@@ -20,7 +21,11 @@ contract AccountAddress {
     //    }
 
     function transfer(address token, address to, uint256 amount) external _onlyOwner {
-        IERC20(token).approve(msg.sender, amount);
-        TransferHelper.safeTransfer(token, to, amount);
+
+        //IERC20(token).approve(msg.sender, amount);
+        if (IERC20(token).balanceOf((this)) >= amount) {
+            TransferHelper.safeTransfer(token, to, amount);
+        }
+
     }
 }

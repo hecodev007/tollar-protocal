@@ -7,7 +7,7 @@
       "hash": "0x6026c3c76678686c787b38b1a1bd68b2fa498fbacdaa15810b4bc90690b038f4",
       "type": 2,
       "accessList": [],
-      "blockHash": "0x2f0f6e6129075905cbca0fe436f6db0cc8dc79b5ba2a6f51c4ac4d80b995d7eb",
+      "blockHash": "0x752d085c66686ad74a2688e04d3efbaa6c7e475225dea731adfe3005dc124cfc",
       "blockNumber": 3,
       "transactionIndex": 0,
       "confirmations": 1,
@@ -50,19 +50,19 @@
     },
     {
       "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
-      "txHash": "0xbffe4ab88fc404cafe2f3a7a1b621aae7e4662408bd28a4ca9b5ed16af72e2b3",
+      "txHash": "0x645d1b32664703d8b31d806f99c355920712aa6ff7c17995e6899a0d7363c31b",
       "kind": "transparent"
     },
     {
       "address": "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
-      "txHash": "0x26c643c226085b98ebf54a3dd38eec536b61046f6f17623e6e79a587f639c7de",
+      "txHash": "0xe6d0cf65523f77ec5cf53f52864d1f6232389a7bd9430842dd61abd96b21a27f",
       "kind": "transparent"
     }
   ],
   "impls": {
     "0677fb54856cfdd0f2036fcf7b535e9afd49b715b7a2d2cb4358b076fc1d05e3": {
       "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
-      "txHash": "0xd325500c9edbce7f8a9275d36b4e6a50516462c9f5a75faf42d9cf5bd745122d",
+      "txHash": "0xb2d7192cb8e0769c03e2aa3e68a8bf8f481a0a71b24286c928a7d992765222ec",
       "layout": {
         "storage": [
           {
@@ -308,7 +308,7 @@
           {
             "contract": "UsrStablecoin",
             "label": "usrIncentive",
-            "type": "t_contract(UsrIncentive)24030",
+            "type": "t_contract(UsrIncentive)24065",
             "src": "contracts\\Usr\\Usr.sol:70"
           },
           {
@@ -358,7 +358,7 @@
           "t_uint256": {
             "label": "uint256"
           },
-          "t_contract(UsrIncentive)24030": {
+          "t_contract(UsrIncentive)24065": {
             "label": "contract UsrIncentive"
           },
           "t_mapping(t_bytes32,t_struct(RoleData)3912_storage)": {
@@ -372,7 +372,7 @@
             "members": [
               {
                 "label": "members",
-                "type": "t_struct(AddressSet)24471_storage"
+                "type": "t_struct(AddressSet)24506_storage"
               },
               {
                 "label": "adminRole",
@@ -380,16 +380,16 @@
               }
             ]
           },
-          "t_struct(AddressSet)24471_storage": {
+          "t_struct(AddressSet)24506_storage": {
             "label": "struct EnumerableSet.AddressSet",
             "members": [
               {
                 "label": "_inner",
-                "type": "t_struct(Set)24285_storage"
+                "type": "t_struct(Set)24320_storage"
               }
             ]
           },
-          "t_struct(Set)24285_storage": {
+          "t_struct(Set)24320_storage": {
             "label": "struct EnumerableSet.Set",
             "members": [
               {
@@ -422,7 +422,7 @@
     },
     "d7916fec29909c55e1f4810292072fe75a921744b6221cfef3f38e40b9841e84": {
       "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-      "txHash": "0xacab10a4b346007d62ca11f8f0f7fb5d4f025a68d44572ba449feab503c98b26",
+      "txHash": "0x2a1e0bd46156a60332cad57751eed3d1a79aaff1002ff52d59d21b9cdb7e63cf",
       "layout": {
         "storage": [
           {
@@ -524,7 +524,7 @@
           {
             "contract": "Tollar",
             "label": "USR",
-            "type": "t_contract(UsrStablecoin)21886",
+            "type": "t_contract(UsrStablecoin)21893",
             "src": "contracts\\TAR\\TAR.sol:30"
           },
           {
@@ -619,7 +619,7 @@
           "t_address": {
             "label": "address"
           },
-          "t_contract(UsrStablecoin)21886": {
+          "t_contract(UsrStablecoin)21893": {
             "label": "contract UsrStablecoin"
           },
           "t_bool": {
@@ -723,7 +723,7 @@
             "members": [
               {
                 "label": "members",
-                "type": "t_struct(AddressSet)24471_storage"
+                "type": "t_struct(AddressSet)24506_storage"
               },
               {
                 "label": "adminRole",
@@ -731,16 +731,16 @@
               }
             ]
           },
-          "t_struct(AddressSet)24471_storage": {
+          "t_struct(AddressSet)24506_storage": {
             "label": "struct EnumerableSet.AddressSet",
             "members": [
               {
                 "label": "_inner",
-                "type": "t_struct(Set)24285_storage"
+                "type": "t_struct(Set)24320_storage"
               }
             ]
           },
-          "t_struct(Set)24285_storage": {
+          "t_struct(Set)24320_storage": {
             "label": "struct EnumerableSet.Set",
             "members": [
               {
@@ -768,9 +768,9 @@
         }
       }
     },
-    "1139541d47f8693967072de36e0c45b426dc118decca2bf1a9ba511118242901": {
+    "43772dc247d063a95622fdd54f146d19e95441eab1cc138ee52ed9e1963be5ad": {
       "address": "0x0165878A594ca255338adfa4d48449f69242Eb8F",
-      "txHash": "0xe99997731d638aad5531249b4908089ee27cb40d3529ef8699244ba074c58137",
+      "txHash": "0xc1d0b3fa4f2b488cff4126c5d574e67cf9709761094792d7b4e1e2b9d6cff6a3",
       "layout": {
         "storage": [
           {
@@ -848,7 +848,7 @@
           {
             "contract": "UsrIncentive",
             "label": "UserLast100Trans",
-            "type": "t_array(t_struct(UserTrans)21911_storage)100_storage",
+            "type": "t_array(t_struct(UserTrans)21918_storage)100_storage",
             "src": "contracts\\Usr\\UsrIncentive.sol:37"
           },
           {
@@ -938,7 +938,7 @@
           {
             "contract": "UsrIncentive",
             "label": "USR",
-            "type": "t_contract(UsrStablecoin)21886",
+            "type": "t_contract(UsrStablecoin)21893",
             "src": "contracts\\Usr\\UsrIncentive.sol:54"
           },
           {
@@ -968,7 +968,7 @@
           {
             "contract": "UsrIncentive",
             "label": "rewards",
-            "type": "t_mapping(t_uint256,t_array(t_struct(UserReward)21920_storage)dyn_storage)",
+            "type": "t_mapping(t_uint256,t_array(t_struct(UserReward)21927_storage)dyn_storage)",
             "src": "contracts\\Usr\\UsrIncentive.sol:61"
           },
           {
@@ -988,10 +988,10 @@
           "t_contract(IUniswapV2Pair)10142": {
             "label": "contract IUniswapV2Pair"
           },
-          "t_array(t_struct(UserTrans)21911_storage)100_storage": {
+          "t_array(t_struct(UserTrans)21918_storage)100_storage": {
             "label": "struct UsrIncentive.UserTrans[100]"
           },
-          "t_struct(UserTrans)21911_storage": {
+          "t_struct(UserTrans)21918_storage": {
             "label": "struct UsrIncentive.UserTrans",
             "members": [
               {
@@ -1010,19 +1010,19 @@
           "t_mapping(t_address,t_bool)": {
             "label": "mapping(address => bool)"
           },
-          "t_contract(UsrStablecoin)21886": {
+          "t_contract(UsrStablecoin)21893": {
             "label": "contract UsrStablecoin"
           },
           "t_contract(Tollar)9274": {
             "label": "contract Tollar"
           },
-          "t_mapping(t_uint256,t_array(t_struct(UserReward)21920_storage)dyn_storage)": {
+          "t_mapping(t_uint256,t_array(t_struct(UserReward)21927_storage)dyn_storage)": {
             "label": "mapping(uint256 => struct UsrIncentive.UserReward[])"
           },
-          "t_array(t_struct(UserReward)21920_storage)dyn_storage": {
+          "t_array(t_struct(UserReward)21927_storage)dyn_storage": {
             "label": "struct UsrIncentive.UserReward[]"
           },
-          "t_struct(UserReward)21920_storage": {
+          "t_struct(UserReward)21927_storage": {
             "label": "struct UsrIncentive.UserReward",
             "members": [
               {
